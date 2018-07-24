@@ -10,7 +10,7 @@ namespace XinXiHua\SDK;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\XXH;
+use XinXiHua\SDK\Facades\XXH;
 use XinXiHua\SDK\Models\CorporationPermanentCode;
 
 class AccessToken

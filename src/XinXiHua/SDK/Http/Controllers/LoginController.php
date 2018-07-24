@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\XXH;
+use XinXiHua\SDK\Facades\XXH;
 use XinXiHua\SDK\Services\AuthService;
 
 class LoginController extends Controller
