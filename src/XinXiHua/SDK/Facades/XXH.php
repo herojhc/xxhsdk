@@ -45,7 +45,7 @@ class XXH extends Facade
         Route::post('logout', '\XinXiHua\SDK\Http\Controllers\LoginController@logout')->name('logout');
         Route::get('callback', '\XinXiHua\SDK\Http\Controllers\LoginController@callback')->name('callback');
         Route::get('admin', '\XinXiHua\SDK\Http\Controllers\LoginController@admin')->name('admin');
-        Route::any('serve', '\XinXiHua\SDK\Http\Controllers\LoginController@serve')->name('serve');
+        Route::any('serve', '\XinXiHua\SDK\Http\Controllers\ServeController@serve')->name('serve');
 
     }
 
