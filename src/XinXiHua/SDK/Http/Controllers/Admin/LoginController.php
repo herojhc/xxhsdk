@@ -3,10 +3,10 @@
  * Created by PhpStorm.
  * User: JHC
  * Date: 2018-07-24
- * Time: 8:30
+ * Time: 19:59
  */
 
-namespace XinXiHua\SDK\Http\Controllers;
+namespace XinXiHua\SDK\Http\Controllers\Admin;
 
 
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -19,17 +19,16 @@ use XinXiHua\SDK\Services\AuthService;
 
 class LoginController extends Controller
 {
-
     /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
+       |--------------------------------------------------------------------------
+       | Login Controller
+       |--------------------------------------------------------------------------
+       |
+       | This controller handles authenticating users for the application and
+       | redirecting them to your home screen. The controller uses a trait
+       | to conveniently provide its functionality to your applications.
+       |
+       */
 
     use AuthenticatesUsers;
 
@@ -38,7 +37,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/admin';
 
     /**
      * @var mixed 网关
@@ -61,16 +60,17 @@ class LoginController extends Controller
         $this->gatewayUrl = config('xxh-sdk.agent.gateway_url');
         $this->agentId = config('xxh-sdk.agent.agent_id');
 
-        if (config('xxh-sdk.redirect.home')) {
-            $this->redirectTo = config('xxh-sdk.redirect.home');
+        if (config('xxh-sdk.redirect.admin')) {
+            $this->redirectTo = config('xxh-sdk.redirect.admin');
         }
+
     }
 
 
     public function login(Request $request)
     {
         $agentId = $this->agentId;
-        $redirectUrl = urlencode(config('xxh-sdk.callback.home'));
+        $redirectUrl = urlencode(config('xxh-sdk.callback.admin'));
         return redirect($this->gatewayUrl . '?agent_id=' . $agentId . '&redirect_url=' . $redirectUrl);
     }
 
@@ -110,5 +110,4 @@ class LoginController extends Controller
         return '登陆失败或授权码已过期';
 
     }
-
 }

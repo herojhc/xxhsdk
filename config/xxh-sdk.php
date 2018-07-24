@@ -96,12 +96,14 @@ return array(
         ],
     ],
 
-    'home' => [
-        'url' => env('AUTH_HOME_URL', '/home')
+    'callback' => [
+        'home' => env('AUTH_CALLBACK_HOME_URL', '/callback'),
+        'admin' => env('AUTH_CALLBACK_ADMIN_URL', '/admin/callback')
     ],
 
-    'admin' => [
-        'url' => env('AUTH_ADMIN_URL', '/admin')
+    'redirect' => [
+        'home' => env('AUTH_REDIRECT_HOME_URL', '/home'),
+        'admin' => env('AUTH_REDIRECT_ADMIN_URL', '/admin')
     ],
 
     'agent' => [

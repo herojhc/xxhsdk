@@ -51,9 +51,13 @@ REST_CLIENT_API_HOST=api.v2.services.xinxihua.com
 #应用的ID（信息化平台），具体见应用详情
 AUTH_AGENT_ID=10000
 #前台回调地址
-AUTH_HOME_URL=http://crm.xinxihua.com/callback
+AUTH_CALLBACK_HOME_URL=http://crm.xinxihua.com/callback
+#登录后前台跳转页面
+AUTH_REDIRECT_HOME_URL=http://crm.xinxihua.com/home
 #后台回调地址
-AUTH_ADMIN_URL=http://crm.xinxihua.com/admin
+AUTH_CALLBACK_ADMIN_URL=http://crm.xinxihua.com/admin/callback
+#登录后后台跳转地址
+AUTH_REDIRECT_ADMIN_URL=http://crm.xinxihua.com/admin
 #信息化平台地址
 AUTH_PALTFORM_URL=https://oa.xinxihua.com
 #信息化平台授权登陆地址
