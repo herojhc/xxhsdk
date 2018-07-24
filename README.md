@@ -39,6 +39,7 @@ XXH::routes();
 
 将 serve 添加到 VerifyCsrfToken 中间中
 
+``` php
 <?php
 
 namespace App\Http\Middleware;
@@ -57,9 +58,13 @@ class VerifyCsrfToken extends Middleware
         'serve'
     ];
 }
+```
+
 
 
 ## 用法
+
+``` php
 
 namespace XinXiHua\SDK\Services;
 
@@ -93,6 +98,8 @@ class ContactService
     }
 
 }
+
+```
 
 
 
