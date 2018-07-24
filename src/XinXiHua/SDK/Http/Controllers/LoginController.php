@@ -12,6 +12,7 @@ namespace XinXiHua\SDK\Http\Controllers;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use XinXiHua\SDK\Facades\XXH;
@@ -70,7 +71,15 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $agentId = $this->agentId;
-        $redirectUrl = urlencode(config('xxh-sdk.callback.home'));
+
+        $baseUrl = rtrim($request->getSchemeAndHttpHost(), '\/');
+        $configUrl = config('xxh-sdk.callback.home');
+        $redirectUrl = urlencode($configUrl);
+        if (!stripos($configUrl, 'http')) {
+            $redirectUrl = $baseUrl . '/' . ltrim($configUrl, '\/');
+        }
+
+
         return redirect($this->gatewayUrl . '?agent_id=' . $agentId . '&redirect_url=' . $redirectUrl);
     }
 

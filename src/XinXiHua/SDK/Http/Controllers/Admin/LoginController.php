@@ -70,7 +70,12 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $agentId = $this->agentId;
-        $redirectUrl = urlencode(config('xxh-sdk.callback.admin'));
+        $baseUrl = rtrim($request->getSchemeAndHttpHost(), '\/');
+        $configUrl = config('xxh-sdk.callback.admin');
+        $redirectUrl = urlencode($configUrl);
+        if (!stripos($configUrl, 'http')) {
+            $redirectUrl = $baseUrl . '/' . ltrim($configUrl, '\/');
+        }
         return redirect($this->gatewayUrl . '?agent_id=' . $agentId . '&redirect_url=' . $redirectUrl);
     }
 
