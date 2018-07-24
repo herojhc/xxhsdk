@@ -27,7 +27,7 @@ class XXHServiceProvider extends ServiceProvider
             $this->registerMigrations();
 
             $this->publishes([
-                __DIR__ . '/../../../config/config.php' => config_path('xxh-sdk.php'),
+                __DIR__ . '/../../../config/xxh-sdk.php' => config_path('xxh-sdk.php'),
             ]);
         }
 
