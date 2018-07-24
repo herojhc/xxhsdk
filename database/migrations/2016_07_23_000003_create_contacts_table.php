@@ -25,11 +25,14 @@ class CreateContactsTable extends Migration
             $table->integer('corp_id')->default(0);
             // Adding more table related fields here...
             $table->string('avatar', 255)->default('')->nullable();
+            $table->char('gender', 1)->nullable();
+            $table->date('birthday')->nullable();
             $table->string('code', 50);
             $table->string('name', 20);
             $table->string('mobile', 20)->default('')->nullable();
             $table->string('email', 20)->default('')->nullable();
             $table->boolean('status')->default(0);
+            $table->boolean('is_employee')->default(0);
             $table->boolean('is_admin')->default(0);
             $table->boolean('is_sub_admin')->default(0)->nullable();
             $table->string('open_id', 50);

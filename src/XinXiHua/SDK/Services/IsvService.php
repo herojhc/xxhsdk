@@ -83,9 +83,13 @@ class IsvService
                 Contact::query()->updateOrCreate([
                     'contact_id' => $authUser->contact_id
                 ], [
+                    'code' => $authUser->code,
                     'name' => $authUser->name,
                     'mobile' => $authUser->mobile,
-                    'avatar' => $authUser->avatar
+                    'avatar' => $authUser->avatar,
+                    'corp_id' => $corp_id,
+                    'user_id' => $authUser->user_id,
+                    'is_admin' => 1
                 ]);
 
 

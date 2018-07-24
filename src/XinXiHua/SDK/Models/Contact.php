@@ -30,6 +30,11 @@ class Contact extends Model
         'mobile',
         'email',
         'open_id',
-        'avatar'
+        'avatar',
+        'corp_id',
+        'user_id',
+        'is_admin',
+        'is_sub_admin',
+        'is_employee'
     ];
 }
