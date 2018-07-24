@@ -29,9 +29,8 @@ class AccessToken
     function __construct($corp_id = null, $service_name = null)
     {
         if (empty($corp_id)) {
-            $this->corp_id = XXH::id();
+            $corp_id = XXH::id();
         }
-
         $this->corp_id = $corp_id;
 
         // use default service name
