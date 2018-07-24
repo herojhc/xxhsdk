@@ -54,7 +54,7 @@ class XXHServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(
-            __DIR__ . '/../../../config/config.php',
+            __DIR__ . '/../../../config/xxh-sdk.php',
             'xxh-sdk'
         );
 

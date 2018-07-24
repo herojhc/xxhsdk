@@ -78,6 +78,14 @@ class LoginController extends Controller
 
     }
 
+
+    public function login(Request $request)
+    {
+        $agentId = $this->agentId;
+        $redirectUrl = urlencode(config('xxh-sdk.home.url'));
+        return redirect($this->gatewayUrl . '?agent_id=' . $agentId . '&redirect_url=' . $redirectUrl);
+    }
+
     public function admin(Request $request)
     {
 

@@ -106,8 +106,6 @@ return array(
 
     'agent' => [
         'agent_id' => env('AUTH_AGENT_ID', ''),
-        'home_url' => env('AUTH_HOME_URL', 'https://oa.xinxihua.com/callback'),
-        'admin_url' => env('AUTH_ADMIN_URL', 'https://oa.xinxihua.com/admin'),
         'platform_url' => env('AUTH_PALTFORM_URL', 'https://oa.xinxihua.com'),
         'gateway_url' => env('AUTH_GATEWAY_URL', 'https://oa.xinxihua.com/sso-login'),
         'corp_user_api' => 'auth_user',
