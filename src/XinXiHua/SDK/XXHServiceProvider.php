@@ -28,7 +28,7 @@ class XXHServiceProvider extends ServiceProvider
 
             $this->publishes([
                 __DIR__ . '/../../../config/xxh-sdk.php' => config_path('xxh-sdk.php'),
-            ], 'config');
+            ], 'xxh-sdk-config');
         }
 
 
@@ -43,7 +43,7 @@ class XXHServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/../../../database/migrations' => database_path('migrations'),
-        ], 'xxh-migrations');
+        ], 'xxh-sdk-migrations');
     }
 
     /**
