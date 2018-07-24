@@ -11,17 +11,28 @@ grammar_mindmap: true
 laravel 5.5 或 5.6 以及他们需要的环境
 
 # 安装
+
+``` r
 composer require herojhc/xxh-sdk
+```
 
 # 配置
  
 ## 发布配置
 
-php artisan vendor:publish
+``` php-cli
+php artisan vendor:publish --provider="XinXiHua\SDK\XXHServiceProvider" --tag="config"
+```
 
 ## 运行迁移
 
+``` php-cli
+php artisan vendor:publish --provider="XinXiHua\SDK\XXHServiceProvider" --tag="xxh-migrations"
+
 php artisan migrate
+```
+
+
 
 ## 参数说明
 > * rest.shared_service_config.oauth2_credentials  配置应用的 APPID 和APPSECRET，可以应用详情中查看
@@ -35,7 +46,10 @@ php artisan migrate
 
 ## 路由配置
 在web路由中配置 
+
+``` php
 XXH::routes();
+```
 
 将 serve 添加到 VerifyCsrfToken 中间中
 
