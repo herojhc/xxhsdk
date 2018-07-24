@@ -13,6 +13,11 @@ class CreateCorporationsTable extends Migration
      */
     public function up()
     {
+
+        if (Schema::hasTable('corporations')) {
+            return;
+        }
+
         Schema::create('corporations', function (Blueprint $table) {
             $table->integer('corp_id');
 

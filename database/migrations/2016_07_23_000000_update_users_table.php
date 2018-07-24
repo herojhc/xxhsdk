@@ -15,6 +15,12 @@ class CreateUsersTable extends Migration
     {
 
         Schema::table('users', function (Blueprint $table) {
+
+
+            if (Schema::hasColumn('mobile_validated') && Schema::hasColumn('username')) {
+                return;
+            }
+
             if (Schema::hasColumn('id')) {
                 //更改id为user_id
                 $table->renameColumn('id', 'user_id');
@@ -48,6 +54,7 @@ class CreateUsersTable extends Migration
             $table->boolean('status')->default(0);
             $table->string('api_token', 100);
             $table->smallInteger('source')->default(0)->nullable();
+
         });
 
 
@@ -60,6 +67,27 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        //Schema::dropIfExists('users');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn([
+                'username',
+                'job',
+                'avatar',
+                'gender',
+                'birthday',
+                'country',
+                'province',
+                'city',
+                'timezone',
+                'locale',
+                'mobile',
+                'mobile_validated',
+                'email_validated',
+                'email_validated_at',
+                'name_validated',
+                'status',
+                'api_token',
+                'source'
+            ]);
+        });
     }
 }

@@ -13,6 +13,10 @@ class CreateCorporationPermanentCodesTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('corporation_permanent_codes')) {
+            return;
+        }
+
         Schema::create('corporation_permanent_codes', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('corp_id');
