@@ -10,24 +10,15 @@ namespace XinXiHua\SDK\Services;
 
 
 use Illuminate\Support\Facades\Log;
-use XinXiHua\SDK\AccessToken;
 use XinXiHua\SDK\Exceptions\ApiException;
 
-class ContactService
+class ContactService extends BaseService
 {
 
-    protected $accessToken;
-
-    function __construct(AccessToken $accessToken)
-    {
-        $this->accessToken = $accessToken;
-    }
 
     public function all()
     {
-        $isvCorpClient = $this->accessToken->getIsvCorpClient();
-
-        $response = $isvCorpClient->get('/contacts');
+        $response = $this->client->get('/contacts');
 
         Log::info($response->getResponse());
         if ($response->isResponseSuccess()) {
