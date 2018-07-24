@@ -6,7 +6,10 @@
  * Time: 15:55
  */
 
-namespace Illuminate\Support\Facades;
+namespace XinXiHua\SDK\Facades;
+
+use Illuminate\Support\Facades\Facade;
+use Illuminate\Support\Facades\Route;
 
 
 /**
