@@ -21,6 +21,7 @@ class Corporation extends Model
      * @var array
      */
     protected $fillable = [
+        'corp_id',
         'name',
         'code',
         'logo',
