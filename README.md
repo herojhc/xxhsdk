@@ -30,6 +30,12 @@ php artisan vendor:publish --provider="XinXiHua\SDK\XXHServiceProvider" --tag="x
 php artisan migrate
 ```
 
+## 修改User模型主键
+
+``` php
+protected $primaryKey = 'user_id';
+```
+
 
 
 ## 参数说明

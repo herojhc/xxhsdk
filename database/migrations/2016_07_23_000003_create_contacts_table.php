@@ -35,7 +35,7 @@ class CreateContactsTable extends Migration
             $table->boolean('is_employee')->default(0);
             $table->boolean('is_admin')->default(0);
             $table->boolean('is_sub_admin')->default(0)->nullable();
-            $table->string('open_id', 50);
+            $table->string('open_id', 50)->default('')->nullable();
             $table->timestamps();
         });
     }
