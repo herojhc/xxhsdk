@@ -10,6 +10,7 @@ namespace XinXiHua\SDK\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Log;
 use XinXiHua\SDK\Services\IsvService;
 use XinXiHua\SDK\Support\Crypto\XxhCrypt;
 
@@ -46,6 +47,7 @@ class ServeController extends Controller
         $errCode = $crypt->DecryptMsg($signature, $timeStamp, $nonce, $encrypt, $msg);
 
         if ($errCode != 0) {
+            Log::debug('errCode', [$errCode]);
             return 'error';
         } else {
 
@@ -67,6 +69,7 @@ class ServeController extends Controller
                 }
                 return $code;
             } catch (\Exception $exception) {
+                Log::error($exception->getMessage(), ['exception' => $exception]);
                 return 'error';
             }
         }

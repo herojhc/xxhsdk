@@ -105,7 +105,7 @@ class IsvService
 
             }
         } catch (\Throwable $throwable) {
-            Log::info('install-error', ['exception' => $throwable]);
+            Log::info($throwable->getMessage(), ['exception' => $throwable]);
             DB::rollBack();
         }
 
@@ -130,7 +130,7 @@ class IsvService
             return 'success';
 
         } catch (\Throwable $throwable) {
-            Log::info('uninstall-error', ['exception' => $throwable]);
+            Log::info($throwable->getMessage(), ['exception' => $throwable]);
 
         }
 
