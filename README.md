@@ -5,8 +5,6 @@ grammar_mindmap: true
 ---
 
 
-[toc!?direction=lr]
-
 # 环境
 laravel 5.5 或 5.6 以及他们需要的环境
 
@@ -69,7 +67,17 @@ AUTH_ENCODING_KEY=ZOFV3OSokCBmaC34zP3FM41B88dccl7AC65RuaoyuaB
 ```
 
 
-控制器
+# 使用
+
+## 路由配置
+* 在web路由中配置 
+
+``` php
+XXH::routes();
+```
+
+
+> 说明：XXH::routes() 包含以下路由，如果要控制权限，可以通过中间件方式
 
 ``` php
 Route::get('login', '\XinXiHua\SDK\Http\Controllers\LoginController@login')->name('login');
@@ -81,17 +89,7 @@ Route::get('admin/callback', '\XinXiHua\SDK\Http\Controllers\Admin\LoginControll
 Route::any('serve', '\XinXiHua\SDK\Http\Controllers\ServeController@serve')->name('serve');
 ```
 
-
-# 使用
-
-## 路由配置
-在web路由中配置 
-
-``` php
-XXH::routes();
-```
-
-将 serve 添加到 VerifyCsrfToken 中间件中
+* 将 serve 添加到 VerifyCsrfToken 中间件中
 
 ``` php
 <?php

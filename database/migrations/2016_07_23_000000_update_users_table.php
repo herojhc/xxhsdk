@@ -16,22 +16,21 @@ class CreateUsersTable extends Migration
 
         Schema::table('users', function (Blueprint $table) {
 
-
-            if (Schema::hasColumn('mobile_validated') && Schema::hasColumn('username')) {
+            if (Schema::hasColumn('users', 'mobile_validated') && Schema::hasColumn('users', 'username')) {
                 return;
             }
 
-            if (Schema::hasColumn('id')) {
+            if (Schema::hasColumn('users', 'id')) {
                 //更改id为user_id
                 $table->renameColumn('id', 'user_id');
             }
 
-            if (Schema::hasColumn('password')) {
+            if (Schema::hasColumn('users', 'password')) {
                 //更改password 为非必填
                 $table->string('password')->nullable()->default('')->change();
             }
 
-            if (Schema::hasColumn('email')) {
+            if (Schema::hasColumn('users', 'email')) {
                 //更新email为非必填
                 $table->string('email')->nullable()->default('')->change();
             }
