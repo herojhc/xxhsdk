@@ -51,7 +51,7 @@ class UpdateUsersTable extends Migration
             $table->timestamp('email_validated_at')->nullable();
             $table->boolean('name_validated')->nullable()->default(0);
             $table->boolean('status')->default(0);
-            $table->string('api_token', 100);
+            $table->string('api_token', 100)->default('');
             $table->smallInteger('source')->default(0)->nullable();
 
         });
