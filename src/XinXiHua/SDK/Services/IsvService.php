@@ -23,47 +23,52 @@ class IsvService
     public function install($eventMsg)
     {
 
-        $corp_id = $eventMsg->CorpId;
-        $corp_name = $eventMsg->CorpName;
-        $permanent_code = $eventMsg->PermanentCode;
+        $corpId = $eventMsg->CorpId;
+        $corpName = $eventMsg->CorpName;
+        $permanentCode = $eventMsg->PermanentCode;
         $authUser = $eventMsg->AuthUser;
 
-        Log::info('installing：', [
-            $corp_id,
-            $permanent_code
-        ]);
+        try {
+            Log::info('installing：', [
+                $corpId,
+                $permanentCode,
+                $authUser
+            ]);
+        } catch (\Exception $exception) {
+
+        }
 
         try {
             //
             DB::beginTransaction();
             $authInfo = CorporationPermanentCode::query()->where([
-                ['corp_id', $corp_id],
+                ['corp_id', $corpId],
                 ['agent_id', config('xxh-sdk.agent.agent_id')]
             ])->first();
 
             if ($authInfo) {
 
-                $authInfo->permanent_code = $permanent_code;
+                $authInfo->permanent_code = $permanentCode;
                 $authInfo->saveOrFail();
 
                 return 'success';
             }
 
 
-            $arr['permanent_code'] = $permanent_code;
+            $arr['permanent_code'] = $permanentCode;
 
-            $arr['corp_id'] = $corp_id;
+            $arr['corp_id'] = $corpId;
             $arr['agent_id'] = config('xxh-sdk.agent.agent_id');
-            $arr['name'] = $corp_name;
+            $arr['name'] = $corpName;
 
             if (CorporationPermanentCode::forceCreate($arr)) {
 
                 // 添加一条记录到 corporations表
                 Corporation::query()->updateOrCreate([
-                    'corp_id' => $corp_id
+                    'corp_id' => $corpId
                 ],
                     [
-                        'name' => $corp_name,
+                        'name' => $corpName,
                         'status' => 1,
                         'user_id' => $authUser->user_id
                     ]);
@@ -87,13 +92,13 @@ class IsvService
                     'name' => $authUser->name,
                     'mobile' => $authUser->mobile,
                     'avatar' => $authUser->avatar,
-                    'corp_id' => $corp_id,
+                    'corp_id' => $corpId,
                     'user_id' => $authUser->user_id,
                     'is_admin' => 1
                 ]);
 
 
-                $corp = Corporation::query()->find($corp_id);
+                $corp = Corporation::query()->find($corpId);
                 $contact = Contact::query()->find($authUser->contact_id);
                 $user = User::query()->find($authUser->user_id);
 
