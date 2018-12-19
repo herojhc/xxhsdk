@@ -87,18 +87,19 @@ class LoginController extends Controller
         $corpId = $request->get('corp_id');
 
         if (!$authCode || !$corpId) {
-            return '参数错误！';
+            abort('404', '参数错误！');
         }
 
         try {
 
             $userId = $this->service->setUserInfo($corpId, $authCode);
+
             if (!$userId) {
-                return '获取用户信息失败';
+                abort('500', '获取用户信息失败');
             }
 
             if (!$this->service->setAuthInfo($corpId)) {
-                return '获取企业信息失败';
+                abort('500', '获取企业信息失败');
             }
 
             // 执行登录
@@ -112,7 +113,7 @@ class LoginController extends Controller
         }
 
 
-        return '登陆失败或授权码已过期';
+        abort('500', '登陆失败或授权码已过期');
 
     }
 }
