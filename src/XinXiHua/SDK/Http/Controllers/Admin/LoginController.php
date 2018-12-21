@@ -73,7 +73,7 @@ class LoginController extends Controller
         $baseUrl = rtrim($request->getSchemeAndHttpHost(), '\/');
         $redirectUri = config('xxh-sdk.callback.admin');
         $service = $request->get('service', null);
-        if (empty($service)) {
+        if (!empty($service)) {
             if (stripos($redirectUri, '?')) {
                 $redirectUri .= '&service=' . base64_encode(urldecode($service));
             } else {
@@ -88,7 +88,7 @@ class LoginController extends Controller
         $gatewayUri = $this->gatewayUrl . '?agent_id=' . $agentId . '&redirect_uri=' . urlencode($redirectUri) . '&scope=authorize_contact&response_type=code';
 
         // 附加参数
-        if (empty($request->get('corp_id'))) {
+        if (!empty($request->get('corp_id'))) {
             $gatewayUri .= '&corp_id=' . $request->get('corp_id');
         }
 
