@@ -71,12 +71,28 @@ class LoginController extends Controller
     {
         $agentId = $this->agentId;
         $baseUrl = rtrim($request->getSchemeAndHttpHost(), '\/');
-        $configUrl = config('xxh-sdk.callback.admin');
-        $redirectUrl = urlencode($configUrl);
-        if (!stripos($configUrl, 'http')) {
-            $redirectUrl = $baseUrl . '/' . ltrim($configUrl, '\/');
+        $redirectUri = config('xxh-sdk.callback.admin');
+        $service = $request->get('service', null);
+        if (empty($service)) {
+            if (stripos($redirectUri, '?')) {
+                $redirectUri .= '&service=' . base64_encode(urldecode($service));
+            } else {
+                $redirectUri .= '?service=' . base64_encode(urldecode($service));
+            }
         }
-        return redirect($this->gatewayUrl . '?agent_id=' . $agentId . '&redirect_url=' . $redirectUrl);
+
+        if (!stripos($redirectUri, 'http')) {
+            $redirectUri = $baseUrl . '/' . ltrim($redirectUri, '\/');
+        }
+
+        $gatewayUri = $this->gatewayUrl . '?agent_id=' . $agentId . '&redirect_uri=' . urlencode($redirectUri) . '&scope=authorize_contact&response_type=code';
+
+        // 附加参数
+        if (empty($request->get('corp_id'))) {
+            $gatewayUri .= '&corp_id=' . $request->get('corp_id');
+        }
+
+        return redirect($gatewayUri);
     }
 
 
@@ -87,7 +103,7 @@ class LoginController extends Controller
         $corpId = $request->get('corp_id');
 
         if (!$authCode || !$corpId) {
-            abort('404', '参数错误！');
+            return '参数错误！';
         }
 
         try {
@@ -95,25 +111,27 @@ class LoginController extends Controller
             $userId = $this->service->setUserInfo($corpId, $authCode);
 
             if (!$userId) {
-                abort('500', '获取用户信息失败');
+                return '获取用户信息失败';
             }
 
             if (!$this->service->setAuthInfo($corpId)) {
-                abort('500', '获取企业信息失败');
+                return '获取企业信息失败';
             }
 
             // 执行登录
             XXH::loginUsingId($corpId);
             Auth::loginUsingId($userId, false);
+            // 定义跳转url
+            if (!empty($request->get('service', ''))) {
+                $request->session()->put('url.intended', base64_decode($request->get('service', '')));
+            }
             return $this->sendLoginResponse($request);
 
 
         } catch (\Exception $exception) {
-            Log::info($exception->getMessage(), ['exception' => $exception]);
+            Log::error($exception->getMessage(), ['exception' => $exception]);
         }
 
-
-        abort('500', '登陆失败或授权码已过期');
-
+        return '登陆失败或授权码已过期';
     }
 }
