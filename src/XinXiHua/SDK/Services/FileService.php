@@ -9,6 +9,7 @@
 namespace XinXiHua\SDK\Services;
 
 
+use XinXiHua\SDK\Events\FileUploaded;
 use XinXiHua\SDK\Exceptions\ApiException;
 
 class FileService extends BaseService
@@ -28,8 +29,8 @@ class FileService extends BaseService
             'attachment' => $file
         ]);
 
-
         if ($response->isResponseSuccess()) {
+            event(new FileUploaded($response->getResponseData()['data']));
             return $response->getResponseData()['data'];
         }
 
