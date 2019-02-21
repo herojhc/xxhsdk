@@ -2,25 +2,27 @@
 /**
  * Created by PhpStorm.
  * User: JHC
- * Date: 2018-07-24
- * Time: 11:51
+ * Date: 2018-06-11
+ * Time: 10:45
  */
 
 namespace XinXiHua\SDK\Services;
 
 use XinXiHua\SDK\Exceptions\ApiException;
 
-class ContactService extends BaseService
+class EmployeeService extends BaseService
 {
 
-
     /**
+     * @param array $include
      * @return mixed
      * @throws ApiException
      */
-    public function all()
+    public function all($include = [])
     {
-        $response = $this->client->get('/contacts');
+        $response = $this->client->get('/employees', [
+            'include' => implode(',', $include)
+        ]);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -31,14 +33,16 @@ class ContactService extends BaseService
     /**
      * @param int $page
      * @param int $limit
+     * @param array $include
      * @return mixed
      * @throws ApiException
      */
-    public function paginate($page = 1, $limit = 20)
+    public function paginate($page = 1, $limit = 20, $include = [])
     {
-        $response = $this->client->get('/contacts', [
+        $response = $this->client->get('/employees', [
             'page' => $page,
-            'limit' => $limit
+            'limit' => $limit,
+            'include' => implode(',', $include)
         ]);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
@@ -47,18 +51,37 @@ class ContactService extends BaseService
     }
 
     /**
+     * @param $id
+     * @param array $include
+     * @return mixed
+     * @throws ApiException
+     */
+    public function show($id, $include = [])
+    {
+        $response = $this->client->get('/employees/' . $id, [
+            'include' => implode(',', $include)
+        ]);
+        if ($response->isResponseSuccess()) {
+            return $response->getResponseData()['data'];
+        }
+
+        throw new ApiException($response->getResponseMessage());
+    }
+
+
+    /**
      * @param $data
      * @return mixed
      * @throws ApiException
      */
     public function store($data)
     {
-        $response = $this->client->post('/contacts', $data);
+        $response = $this->client->post('/employees', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
-
         throw new ApiException($response->getResponseMessage());
+
     }
 
     /**
@@ -69,11 +92,10 @@ class ContactService extends BaseService
      */
     public function update($data, $id)
     {
-        $response = $this->client->patch('/contacts/' . $id, $data);
+        $response = $this->client->patch('/employees/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
-
         throw new ApiException($response->getResponseMessage());
     }
 
@@ -82,32 +104,30 @@ class ContactService extends BaseService
      * @return mixed
      * @throws ApiException
      */
-    public function show($id)
+    public function destroy($id)
     {
-        $response = $this->client->get('/contacts/' . $id);
+
+        $response = $this->client->delete('/employees/' . $id);
         if ($response->isResponseSuccess()) {
-            return $response->getResponseData()['data'];
+            return $id;
         }
-
         throw new ApiException($response->getResponseMessage());
     }
 
     /**
-     * @param $id
-     * @param int $attention
-     * @return mixed
+     * @param array $ids
+     * @return bool
      * @throws ApiException
      */
-    public function invite($id, $attention = 0)
+    public function batchDestroy(array $ids)
     {
-        $response = $this->client->get('/contacts/' . $id . '/invite', [
-            'attention' => $attention
+        $response = $this->client->post('/employees/batch', [
+            'delete' => $ids
         ]);
         if ($response->isResponseSuccess()) {
-            return $response->getResponseData()['data'];
+            return true;
         }
 
         throw new ApiException($response->getResponseMessage());
     }
-
 }

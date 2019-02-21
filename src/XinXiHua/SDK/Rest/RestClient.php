@@ -11,6 +11,7 @@ namespace XinXiHua\SDK\Rest;
 use GuzzleHttp\Client;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 
@@ -621,6 +622,8 @@ class RestClient
     public function setResponse(Response $response)
     {
         $this->response = $response;
+        // 记录下返回信息
+        Log::info($response);
         $statusCode = $this->response->getStatusCode();
         if ($statusCode >= 300 && $this->debug_mode) {
             echo "\nResponse STATUS CODE is $statusCode:\n";

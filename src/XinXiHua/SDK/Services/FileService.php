@@ -15,6 +15,13 @@ use XinXiHua\SDK\Exceptions\ApiException;
 class FileService extends BaseService
 {
 
+    /**
+     * @param $file
+     * @param $type
+     * @param string $name
+     * @return mixed
+     * @throws ApiException
+     */
     public function upload($file, $type, $name = '')
     {
 

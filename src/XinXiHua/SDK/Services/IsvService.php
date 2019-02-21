@@ -29,12 +29,15 @@ class IsvService
         $authUser = $eventMsg->AuthUser;
 
         try {
-            Log::info('installing：', [
-                $corpId,
-                $permanentCode,
-                $authUser
+            Log::info('installingLog', [
+                'log' =>
+                    [
+                        $corpId,
+                        $permanentCode,
+                        $authUser
+                    ]
             ]);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
 
         }
 
@@ -74,7 +77,6 @@ class IsvService
                     ]);
 
                 // 添加管理员记录
-
                 User::query()->updateOrCreate([
                     'user_id' => $authUser->user_id
                 ], [
