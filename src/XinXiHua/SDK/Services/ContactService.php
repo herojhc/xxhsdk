@@ -47,6 +47,21 @@ class ContactService extends BaseService
     }
 
     /**
+     * @param $id
+     * @return mixed
+     * @throws ApiException
+     */
+    public function show($id)
+    {
+        $response = $this->client->get('/contacts/' . $id);
+        if ($response->isResponseSuccess()) {
+            return $response->getResponseData()['data'];
+        }
+
+        throw new ApiException($response->getResponseMessage());
+    }
+
+    /**
      * @param $data
      * @return mixed
      * @throws ApiException
@@ -72,21 +87,6 @@ class ContactService extends BaseService
         $response = $this->client->patch('/contacts/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
-        }
-
-        throw new ApiException($response->getResponseMessage());
-    }
-
-    /**
-     * @param $id
-     * @return mixed
-     * @throws ApiException
-     */
-    public function show($id)
-    {
-        $response = $this->client->get('/contacts/' . $id);
-        if ($response->isResponseSuccess()) {
-            return $response->getResponseData()['data'];
         }
 
         throw new ApiException($response->getResponseMessage());
