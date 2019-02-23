@@ -130,4 +130,23 @@ class EmployeeService extends BaseService
 
         throw new ApiException($response->getResponseMessage());
     }
+
+    /**
+     * @param $id
+     * @param $userId
+     * @return bool
+     * @throws ApiException
+     */
+    public function active($id, $userId)
+    {
+        $response = $this->client->post('/employees/active', [
+            'id' => $id,
+            'user_id' => $userId
+        ]);
+        if ($response->isResponseSuccess()) {
+            return true;
+        }
+
+        throw new ApiException($response->getResponseMessage());
+    }
 }
