@@ -27,12 +27,13 @@ class InviteService extends BaseService
     /**
      * @param $data
      * @param int $attention
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function store($data, $attention = 0)
+    public function store($data, $attention = 0, $corpId = null)
     {
-        $response = $this->client->post('/invites?attention=' . $attention, $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/invites?attention=' . $attention, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -42,12 +43,13 @@ class InviteService extends BaseService
 
     /**
      * @param $id
+     * @param $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function show($id)
+    public function show($id, $corpId)
     {
-        $response = $this->client->get('/invites/' . $id);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/invites/' . $id);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }

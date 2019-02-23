@@ -15,12 +15,13 @@ class TeamService extends BaseService
 
     /**
      * @param $data
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function store($data)
+    public function store($data, $corpId = null)
     {
-        $response = $this->client->post('/teams', $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/teams', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -31,13 +32,14 @@ class TeamService extends BaseService
     /**
      * @param $data
      * @param $id
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function update($data, $id)
+    public function update($data, $id, $corpId = null)
     {
 
-        $response = $this->client->patch('/teams/' . $id, $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/teams/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -46,12 +48,13 @@ class TeamService extends BaseService
 
     /**
      * @param $id
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function destroy($id)
+    public function destroy($id, $corpId = null)
     {
-        $response = $this->client->delete('/teams/' . $id);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/teams/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }
@@ -61,13 +64,14 @@ class TeamService extends BaseService
     /**
      * @param $id
      * @param array $contactIds
+     * @param null $corpId
      * @return bool
      * @throws ApiException
      */
-    public function join($id, array $contactIds)
+    public function join($id, array $contactIds, $corpId = null)
     {
 
-        $response = $this->client->post('/teams/' . $id . '/contacts', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/teams/' . $id . '/contacts', [
             'contact_ids' => $contactIds
         ]);
         if ($response->isResponseSuccess()) {
@@ -80,12 +84,13 @@ class TeamService extends BaseService
     /**
      * @param $id
      * @param $contactId
+     * @param null $corpId
      * @return bool
      * @throws ApiException
      */
-    public function leave($id, $contactId)
+    public function leave($id, $contactId, $corpId = null)
     {
-        $response = $this->client->delete('/teams/' . $id . '/contacts/' . $contactId);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/teams/' . $id . '/contacts/' . $contactId);
         if ($response->isResponseSuccess()) {
             return true;
         }

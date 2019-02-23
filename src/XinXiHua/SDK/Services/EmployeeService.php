@@ -15,12 +15,13 @@ class EmployeeService extends BaseService
 
     /**
      * @param array $include
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function all($include = [])
+    public function all($include = [], $corpId = null)
     {
-        $response = $this->client->get('/employees', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/employees', [
             'include' => implode(',', $include)
         ]);
         if ($response->isResponseSuccess()) {
@@ -34,12 +35,13 @@ class EmployeeService extends BaseService
      * @param int $page
      * @param int $limit
      * @param array $include
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function paginate($page = 1, $limit = 20, $include = [])
+    public function paginate($page = 1, $limit = 20, $include = [], $corpId = null)
     {
-        $response = $this->client->get('/employees', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/employees', [
             'page' => $page,
             'limit' => $limit,
             'include' => implode(',', $include)
@@ -53,12 +55,13 @@ class EmployeeService extends BaseService
     /**
      * @param $id
      * @param array $include
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function show($id, $include = [])
+    public function show($id, $include = [], $corpId = null)
     {
-        $response = $this->client->get('/employees/' . $id, [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/employees/' . $id, [
             'include' => implode(',', $include)
         ]);
         if ($response->isResponseSuccess()) {
@@ -71,12 +74,13 @@ class EmployeeService extends BaseService
 
     /**
      * @param $data
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function store($data)
+    public function store($data, $corpId = null)
     {
-        $response = $this->client->post('/employees', $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/employees', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -87,12 +91,13 @@ class EmployeeService extends BaseService
     /**
      * @param $data
      * @param $id
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function update($data, $id)
+    public function update($data, $id, $corpId = null)
     {
-        $response = $this->client->patch('/employees/' . $id, $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/employees/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -101,13 +106,14 @@ class EmployeeService extends BaseService
 
     /**
      * @param $id
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function destroy($id)
+    public function destroy($id, $corpId = null)
     {
 
-        $response = $this->client->delete('/employees/' . $id);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/employees/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }
@@ -116,12 +122,13 @@ class EmployeeService extends BaseService
 
     /**
      * @param array $ids
+     * @param null $corpId
      * @return bool
      * @throws ApiException
      */
-    public function batchDestroy(array $ids)
+    public function batchDestroy(array $ids, $corpId = null)
     {
-        $response = $this->client->post('/employees/batch', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/employees/batch', [
             'delete' => $ids
         ]);
         if ($response->isResponseSuccess()) {
@@ -134,12 +141,13 @@ class EmployeeService extends BaseService
     /**
      * @param $id
      * @param $userId
+     * @param null $corpId
      * @return bool
      * @throws ApiException
      */
-    public function active($id, $userId)
+    public function active($id, $userId, $corpId = null)
     {
-        $response = $this->client->post('/employees/active', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/employees/active', [
             'id' => $id,
             'user_id' => $userId
         ]);

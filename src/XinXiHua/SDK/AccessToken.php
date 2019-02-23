@@ -22,17 +22,10 @@ class AccessToken
 
     protected $service_name;
 
-    protected $corp_id = null;
-
     protected $use_cache_token = null;
 
-    function __construct($corp_id = null, $service_name = null)
+    function __construct($service_name = null)
     {
-        if (empty($corp_id)) {
-            $corp_id = XXH::id();
-        }
-        $this->corp_id = $corp_id;
-
         // use default service name
         if (empty($service_name)) {
             $service_name = $this->getConfig('default_service_name');
@@ -59,13 +52,13 @@ class AccessToken
 
     public function getIsvCorpClient($authCorpId = null)
     {
-        if (!empty($authCorpId)) {
-            $this->corp_id = $authCorpId;
+        if (empty($authCorpId)) {
+            $authCorpId = XXH::id();
         }
         $client = new Rest\RestClient($this->service_name, false);
-        $access_token = $this->getIsvCorpAccessToken($this->corp_id);
-        $client->setOAuthToken($this->corp_id, $access_token);
-        $client->withOAuthToken($this->corp_id);
+        $access_token = $this->getIsvCorpAccessToken($authCorpId);
+        $client->setOAuthToken($authCorpId, $access_token);
+        $client->withOAuthToken($authCorpId);
         return $client;
     }
 

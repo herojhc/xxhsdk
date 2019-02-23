@@ -14,12 +14,13 @@ class StoreService extends BaseService
 {
     /**
      * @param $data
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function store($data)
+    public function store($data, $corpId = null)
     {
-        $response = $this->client->post('/stores', $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/stores', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -30,13 +31,14 @@ class StoreService extends BaseService
     /**
      * @param $data
      * @param $id
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function update($data, $id)
+    public function update($data, $id, $corpId = null)
     {
 
-        $response = $this->client->patch('/stores/' . $id, $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/stores/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -45,12 +47,13 @@ class StoreService extends BaseService
 
     /**
      * @param $id
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function destroy($id)
+    public function destroy($id, $corpId = null)
     {
-        $response = $this->client->delete('/stores/' . $id);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/stores/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }

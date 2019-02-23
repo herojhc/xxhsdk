@@ -14,11 +14,13 @@ use XinXiHua\SDK\AccessToken;
 class BaseService
 {
 
-    protected $client;
-
+    /**
+     * @var AccessToken
+     */
+    protected $accessToken;
 
     function __construct(AccessToken $accessToken)
     {
-        $this->client = $accessToken->getIsvCorpClient();
+        $this->accessToken = $accessToken;
     }
 }

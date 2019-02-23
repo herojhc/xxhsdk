@@ -15,12 +15,13 @@ class ArticleService extends BaseService
 {
 
     /**
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function all()
+    public function all($corpId = null)
     {
-        $response = $this->client->get('/articles');
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/articles');
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -31,12 +32,13 @@ class ArticleService extends BaseService
     /**
      * @param int $page
      * @param int $limit
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function paginate($page = 1, $limit = 20)
+    public function paginate($page = 1, $limit = 20, $corpId = null)
     {
-        $response = $this->client->get('/articles', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/articles', [
             'page' => $page,
             'limit' => $limit
         ]);
@@ -48,12 +50,13 @@ class ArticleService extends BaseService
 
     /**
      * @param $id
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function show($id)
+    public function show($id, $corpId = null)
     {
-        $response = $this->client->get('/articles/' . $id);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/articles/' . $id);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }

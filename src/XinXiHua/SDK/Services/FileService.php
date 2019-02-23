@@ -19,10 +19,11 @@ class FileService extends BaseService
      * @param $file
      * @param $type
      * @param string $name
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function upload($file, $type, $name = '')
+    public function upload($file, $type, $name = '', $corpId = null)
     {
 
         // 调用存储API
@@ -31,7 +32,7 @@ class FileService extends BaseService
             $url .= '?type=' . $type;
         }
 
-        $response = $this->client->postMultipartSimple($url, [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->postMultipartSimple($url, [
             'name' => $name,
             'attachment' => $file
         ]);

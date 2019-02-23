@@ -12,11 +12,12 @@ class RegionService extends BaseService
 {
 
     /**
+     * @param null $corpId
      * @return array
      */
-    public function getProvinces()
+    public function getProvinces($corpId = null)
     {
-        $response = $this->client->get('provinces');
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('provinces');
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -25,11 +26,12 @@ class RegionService extends BaseService
 
     /**
      * @param $provinceId
+     * @param null $corpId
      * @return array
      */
-    public function getCities($provinceId)
+    public function getCities($provinceId, $corpId = null)
     {
-        $response = $this->client->get('provinces/' . $provinceId . '/cities');
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('provinces/' . $provinceId . '/cities');
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -38,11 +40,12 @@ class RegionService extends BaseService
 
     /**
      * @param $cityId
+     * @param null $corpId
      * @return array
      */
-    public function getAreas($cityId)
+    public function getAreas($cityId, $corpId = null)
     {
-        $response = $this->client->get('cities/' . $cityId . '/areas');
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('cities/' . $cityId . '/areas');
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }

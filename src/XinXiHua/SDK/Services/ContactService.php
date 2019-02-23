@@ -15,12 +15,13 @@ class ContactService extends BaseService
 
 
     /**
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function all()
+    public function all($corpId = null)
     {
-        $response = $this->client->get('/contacts');
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts');
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -31,12 +32,13 @@ class ContactService extends BaseService
     /**
      * @param int $page
      * @param int $limit
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function paginate($page = 1, $limit = 20)
+    public function paginate($page = 1, $limit = 20, $corpId = null)
     {
-        $response = $this->client->get('/contacts', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts', [
             'page' => $page,
             'limit' => $limit
         ]);
@@ -48,12 +50,13 @@ class ContactService extends BaseService
 
     /**
      * @param $id
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function show($id)
+    public function show($id, $corpId = null)
     {
-        $response = $this->client->get('/contacts/' . $id);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts/' . $id);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -63,12 +66,13 @@ class ContactService extends BaseService
 
     /**
      * @param $data
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function store($data)
+    public function store($data, $corpId = null)
     {
-        $response = $this->client->post('/contacts', $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/contacts', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -79,12 +83,13 @@ class ContactService extends BaseService
     /**
      * @param $data
      * @param $id
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function update($data, $id)
+    public function update($data, $id, $corpId = null)
     {
-        $response = $this->client->patch('/contacts/' . $id, $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/contacts/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -95,12 +100,13 @@ class ContactService extends BaseService
     /**
      * @param $id
      * @param int $attention
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function invite($id, $attention = 0)
+    public function invite($id, $attention = 0, $corpId = null)
     {
-        $response = $this->client->get('/contacts/' . $id . '/invite', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts/' . $id . '/invite', [
             'attention' => $attention
         ]);
         if ($response->isResponseSuccess()) {

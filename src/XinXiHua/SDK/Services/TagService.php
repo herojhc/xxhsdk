@@ -16,12 +16,13 @@ class TagService extends BaseService
 
     /**
      * @param $data
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function store($data)
+    public function store($data, $corpId = null)
     {
-        $response = $this->client->post('/tags', $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/tags', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -32,13 +33,14 @@ class TagService extends BaseService
     /**
      * @param $data
      * @param $id
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function update($data, $id)
+    public function update($data, $id, $corpId = null)
     {
 
-        $response = $this->client->patch('/tags/' . $id, $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/tags/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -47,12 +49,13 @@ class TagService extends BaseService
 
     /**
      * @param $id
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function destroy($id)
+    public function destroy($id, $corpId = null)
     {
-        $response = $this->client->delete('/tags/' . $id);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/tags/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }

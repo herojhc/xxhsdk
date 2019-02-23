@@ -14,12 +14,13 @@ class ProductService extends BaseService
 {
     /**
      * @param array $include
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function all($include = ['logo'])
+    public function all($include = ['logo'], $corpId = null)
     {
-        $response = $this->client->get('/products', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/products', [
             'include' => implode(',', $include)
         ]);
         if ($response->isResponseSuccess()) {
@@ -32,12 +33,13 @@ class ProductService extends BaseService
      * @param int $page
      * @param int $limit
      * @param array $include
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function paginate($page = 1, $limit = 20, $include = ['logo'])
+    public function paginate($page = 1, $limit = 20, $include = ['logo'], $corpId = null)
     {
-        $response = $this->client->get('/products', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/products', [
             'page' => $page,
             'limit' => $limit,
             'include' => implode(',', $include)
@@ -50,13 +52,14 @@ class ProductService extends BaseService
 
     /**
      * @param $data
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function store($data)
+    public function store($data, $corpId = null)
     {
 
-        $response = $this->client->post('/products', $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/products', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -67,13 +70,14 @@ class ProductService extends BaseService
     /**
      * @param $data
      * @param $id
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function update($data, $id)
+    public function update($data, $id, $corpId = null)
     {
 
-        $response = $this->client->patch('/products/' . $id, $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/products/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -82,13 +86,14 @@ class ProductService extends BaseService
 
     /**
      * @param $id
+     * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function destroy($id)
+    public function destroy($id, $corpId = null)
     {
 
-        $response = $this->client->delete('/products/' . $id);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/products/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }
@@ -97,12 +102,13 @@ class ProductService extends BaseService
 
     /**
      * @param array $ids
+     * @param null $corpId
      * @return bool
      * @throws ApiException
      */
-    public function batchDestroy(array $ids)
+    public function batchDestroy(array $ids, $corpId = null)
     {
-        $response = $this->client->post('/products/batch', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/products/batch', [
             'delete' => $ids
         ]);
         if ($response->isResponseSuccess()) {
