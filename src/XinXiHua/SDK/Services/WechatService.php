@@ -32,14 +32,21 @@ class WechatService extends BaseService
     }
 
     /**
-     * @param $data
-     * @param string $sendType
+     * @param $kfId
+     * @param $toId
+     * @param array $content
+     * @param string $msgType
      * @return bool
      * @throws ApiException
      */
-    public function sendCustomMessage($data, $sendType = 'default')
+    public function sendCustomMessage($toId, array $content, $msgType = 'text', $kfId = 0)
     {
-        $response = $this->client->post('/wechat/custom/message?sendType=' . $sendType, $data);
+        $response = $this->client->post('/wechat/custom/message', [
+            'kf_id' => $kfId,
+            'to_id' => $toId,
+            'content' => $content,
+            'msg_type' => $msgType
+        ]);
         if ($response->isResponseSuccess()) {
             return true;
         }
