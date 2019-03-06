@@ -6,9 +6,10 @@
  * Time: 8:43
  */
 
-namespace XinXiHua\SDK\Services;
+namespace XinXiHua\SDK\Services\V1;
 
 use XinXiHua\SDK\Exceptions\ApiException;
+use XinXiHua\SDK\Services\BaseService;
 
 class TeamService extends BaseService
 {
@@ -21,7 +22,7 @@ class TeamService extends BaseService
      */
     public function store($data, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/teams', $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/v1/teams', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -39,7 +40,7 @@ class TeamService extends BaseService
     public function update($data, $id, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/teams/' . $id, $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/v1/teams/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -54,7 +55,7 @@ class TeamService extends BaseService
      */
     public function destroy($id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/teams/' . $id);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/v1/teams/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }
@@ -71,7 +72,7 @@ class TeamService extends BaseService
     public function join($id, array $contactIds, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/teams/' . $id . '/contacts', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/v1/teams/' . $id . '/contacts', [
             'contact_ids' => $contactIds
         ]);
         if ($response->isResponseSuccess()) {
@@ -90,7 +91,7 @@ class TeamService extends BaseService
      */
     public function leave($id, $contactId, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/teams/' . $id . '/contacts/' . $contactId);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/v1/teams/' . $id . '/contacts/' . $contactId);
         if ($response->isResponseSuccess()) {
             return true;
         }

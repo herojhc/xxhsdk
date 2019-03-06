@@ -2,31 +2,34 @@
 /**
  * Created by PhpStorm.
  * User: JHC
- * Date: 2019-02-21
- * Time: 14:31
+ * Date: 2018-06-11
+ * Time: 10:45
  */
 
-namespace XinXiHua\SDK\Services;
+namespace XinXiHua\SDK\Services\V2;
 
 use XinXiHua\SDK\Exceptions\ApiException;
+use XinXiHua\SDK\Services\BaseService;
 
-class ProductService extends BaseService
+class EmployeeService extends BaseService
 {
+
     /**
      * @param array $include
      * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function all($include = ['logo'], $corpId = null)
+    public function all($include = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/products', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/v2/employees', [
             'include' => implode(',', $include)
         ]);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
         throw new ApiException($response->getResponseMessage());
+
     }
 
     /**
@@ -37,9 +40,9 @@ class ProductService extends BaseService
      * @return mixed
      * @throws ApiException
      */
-    public function paginate($page = 1, $limit = 20, $include = ['logo'], $corpId = null)
+    public function paginate($page = 1, $limit = 20, $include = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/products', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/v2/employees', [
             'page' => $page,
             'limit' => $limit,
             'include' => implode(',', $include)
@@ -51,6 +54,26 @@ class ProductService extends BaseService
     }
 
     /**
+     * @param $id
+     * @param array $include
+     * @param null $corpId
+     * @return mixed
+     * @throws ApiException
+     */
+    public function show($id, $include = [], $corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/v2/employees/' . $id, [
+            'include' => implode(',', $include)
+        ]);
+        if ($response->isResponseSuccess()) {
+            return $response->getResponseData()['data'];
+        }
+
+        throw new ApiException($response->getResponseMessage());
+    }
+
+
+    /**
      * @param $data
      * @param null $corpId
      * @return mixed
@@ -58,8 +81,7 @@ class ProductService extends BaseService
      */
     public function store($data, $corpId = null)
     {
-
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/products', $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/v2/employees', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -76,8 +98,7 @@ class ProductService extends BaseService
      */
     public function update($data, $id, $corpId = null)
     {
-
-        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/products/' . $id, $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/v2/employees/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -93,7 +114,7 @@ class ProductService extends BaseService
     public function destroy($id, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/products/' . $id);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/v2/employees/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }
@@ -108,8 +129,28 @@ class ProductService extends BaseService
      */
     public function batchDestroy(array $ids, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/products/batch', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/v2/employees/batch', [
             'delete' => $ids
+        ]);
+        if ($response->isResponseSuccess()) {
+            return true;
+        }
+
+        throw new ApiException($response->getResponseMessage());
+    }
+
+    /**
+     * @param $id
+     * @param $userId
+     * @param null $corpId
+     * @return bool
+     * @throws ApiException
+     */
+    public function active($id, $userId, $corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/v2/employees/active', [
+            'id' => $id,
+            'user_id' => $userId
         ]);
         if ($response->isResponseSuccess()) {
             return true;

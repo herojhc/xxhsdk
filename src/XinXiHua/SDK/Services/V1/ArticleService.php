@@ -6,10 +6,11 @@
  * Time: 15:44
  */
 
-namespace XinXiHua\SDK\Services;
+namespace XinXiHua\SDK\Services\V1;
 
 
 use XinXiHua\SDK\Exceptions\ApiException;
+use XinXiHua\SDK\Services\BaseService;
 
 class ArticleService extends BaseService
 {
@@ -21,7 +22,7 @@ class ArticleService extends BaseService
      */
     public function all($corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/articles');
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/v1/articles');
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -38,7 +39,7 @@ class ArticleService extends BaseService
      */
     public function paginate($page = 1, $limit = 20, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/articles', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/v1/articles', [
             'page' => $page,
             'limit' => $limit
         ]);
@@ -56,7 +57,7 @@ class ArticleService extends BaseService
      */
     public function show($id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/articles/' . $id);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/v1/articles/' . $id);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }

@@ -2,33 +2,32 @@
 /**
  * Created by PhpStorm.
  * User: JHC
- * Date: 2018-06-11
- * Time: 10:26
+ * Date: 2019-02-21
+ * Time: 14:31
  */
 
-namespace XinXiHua\SDK\Services;
+namespace XinXiHua\SDK\Services\V2;
 
 use XinXiHua\SDK\Exceptions\ApiException;
+use XinXiHua\SDK\Services\BaseService;
 
-class DepartmentService extends BaseService
+class ProductService extends BaseService
 {
-
     /**
      * @param array $include
      * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function all($include = [], $corpId = null)
+    public function all($include = ['logo'], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/departments', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/v2/products', [
             'include' => implode(',', $include)
         ]);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
         throw new ApiException($response->getResponseMessage());
-
     }
 
     /**
@@ -39,9 +38,9 @@ class DepartmentService extends BaseService
      * @return mixed
      * @throws ApiException
      */
-    public function paginate($page = 1, $limit = 20, $include = [], $corpId = null)
+    public function paginate($page = 1, $limit = 20, $include = ['logo'], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/departments', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/v2/products', [
             'page' => $page,
             'limit' => $limit,
             'include' => implode(',', $include)
@@ -53,26 +52,6 @@ class DepartmentService extends BaseService
     }
 
     /**
-     * @param $id
-     * @param array $include
-     * @param null $corpId
-     * @return mixed
-     * @throws ApiException
-     */
-    public function show($id, $include = [], $corpId = null)
-    {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/departments/' . $id, [
-            'include' => implode(',', $include)
-        ]);
-        if ($response->isResponseSuccess()) {
-            return $response->getResponseData()['data'];
-        }
-
-        throw new ApiException($response->getResponseMessage());
-    }
-
-
-    /**
      * @param $data
      * @param null $corpId
      * @return mixed
@@ -80,11 +59,11 @@ class DepartmentService extends BaseService
      */
     public function store($data, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/departments', $data);
+
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/v2/products', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
-
         throw new ApiException($response->getResponseMessage());
 
     }
@@ -99,13 +78,11 @@ class DepartmentService extends BaseService
     public function update($data, $id, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/departments/' . $id, $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/v2/products/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
-
         throw new ApiException($response->getResponseMessage());
-
     }
 
     /**
@@ -116,11 +93,29 @@ class DepartmentService extends BaseService
      */
     public function destroy($id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/departments/' . $id);
+
+        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/v2/products/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }
         throw new ApiException($response->getResponseMessage());
     }
 
+    /**
+     * @param array $ids
+     * @param null $corpId
+     * @return bool
+     * @throws ApiException
+     */
+    public function batchDestroy(array $ids, $corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/v2/products/batch', [
+            'delete' => $ids
+        ]);
+        if ($response->isResponseSuccess()) {
+            return true;
+        }
+
+        throw new ApiException($response->getResponseMessage());
+    }
 }

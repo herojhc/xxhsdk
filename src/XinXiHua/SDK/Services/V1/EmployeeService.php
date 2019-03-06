@@ -6,9 +6,10 @@
  * Time: 10:45
  */
 
-namespace XinXiHua\SDK\Services;
+namespace XinXiHua\SDK\Services\V1;
 
 use XinXiHua\SDK\Exceptions\ApiException;
+use XinXiHua\SDK\Services\BaseService;
 
 class EmployeeService extends BaseService
 {
@@ -21,7 +22,7 @@ class EmployeeService extends BaseService
      */
     public function all($include = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/employees', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/v1/employees', [
             'include' => implode(',', $include)
         ]);
         if ($response->isResponseSuccess()) {
@@ -41,7 +42,7 @@ class EmployeeService extends BaseService
      */
     public function paginate($page = 1, $limit = 20, $include = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/employees', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/v1/employees', [
             'page' => $page,
             'limit' => $limit,
             'include' => implode(',', $include)
@@ -61,7 +62,7 @@ class EmployeeService extends BaseService
      */
     public function show($id, $include = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/employees/' . $id, [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/v1/employees/' . $id, [
             'include' => implode(',', $include)
         ]);
         if ($response->isResponseSuccess()) {
@@ -80,7 +81,7 @@ class EmployeeService extends BaseService
      */
     public function store($data, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/employees', $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/v1/employees', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -97,7 +98,7 @@ class EmployeeService extends BaseService
      */
     public function update($data, $id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/employees/' . $id, $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/v1/employees/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -113,7 +114,7 @@ class EmployeeService extends BaseService
     public function destroy($id, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/employees/' . $id);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/v1/employees/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }
@@ -128,7 +129,7 @@ class EmployeeService extends BaseService
      */
     public function batchDestroy(array $ids, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/employees/batch', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/v1/employees/batch', [
             'delete' => $ids
         ]);
         if ($response->isResponseSuccess()) {
@@ -147,7 +148,7 @@ class EmployeeService extends BaseService
      */
     public function active($id, $userId, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/employees/active', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/v1/employees/active', [
             'id' => $id,
             'user_id' => $userId
         ]);
