@@ -2,19 +2,17 @@
 /**
  * Created by PhpStorm.
  * User: JHC
- * Date: 2019-02-21
- * Time: 19:24
+ * Date: 2019-02-02
+ * Time: 10:13
  */
 
-namespace XinXiHua\SDK\Services\V2;
-
+namespace XinXiHua\SDK\Services\V1;
 
 use XinXiHua\SDK\Exceptions\ApiException;
 use XinXiHua\SDK\Services\BaseService;
 
-class TagService extends BaseService
+class StoreService extends BaseService
 {
-
     /**
      * @param $data
      * @param null $corpId
@@ -23,7 +21,7 @@ class TagService extends BaseService
      */
     public function store($data, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/v2/tags', $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/v1/stores', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -41,7 +39,7 @@ class TagService extends BaseService
     public function update($data, $id, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/v2/tags/' . $id, $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/v1/stores/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -56,7 +54,7 @@ class TagService extends BaseService
      */
     public function destroy($id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/v2/tags/' . $id);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/v1/stores/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }
