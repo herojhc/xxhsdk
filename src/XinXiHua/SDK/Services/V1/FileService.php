@@ -9,6 +9,7 @@
 namespace XinXiHua\SDK\Services\V1;
 
 use Illuminate\Http\UploadedFile;
+use XinXiHua\SDK\Events\Uploaded;
 use XinXiHua\SDK\Exceptions\ApiException;
 use XinXiHua\SDK\Models\Attachment;
 use XinXiHua\SDK\Services\BaseService;
@@ -54,7 +55,8 @@ class FileService extends BaseService
                 'sha1' => $file['sha1'] ?? '',
                 'is_image' => $file['is_image'] ?? 0
             ])->save();
-
+            // 触发上传后事件
+            event(new Uploaded($attachment));
             return $attachment->toArray();
         }
 

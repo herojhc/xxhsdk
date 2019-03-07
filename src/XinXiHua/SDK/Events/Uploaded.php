@@ -10,7 +10,7 @@ namespace XinXiHua\SDK\Events;
 
 use Illuminate\Queue\SerializesModels;
 
-class FileUploaded
+class Uploaded
 {
     use SerializesModels;
 
