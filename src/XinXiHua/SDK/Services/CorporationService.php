@@ -18,7 +18,7 @@ class CorporationService extends BaseService
      * @return mixed
      * @throws ApiException
      */
-    public function all($corpId = null)
+    public function details($corpId = null)
     {
         $response = $this->accessToken->getIsvCorpClient($corpId)->get('/corporation/details');
         if ($response->isResponseSuccess()) {
