@@ -29,7 +29,7 @@ class IsvService
         $authUser = $eventMsg->AuthUser;
 
         try {
-            Log::info('installingLog', [
+            Log::debug('installingLog', [
                 'log' =>
                     [
                         $corpId,
@@ -59,7 +59,6 @@ class IsvService
 
 
             $arr['permanent_code'] = $permanentCode;
-
             $arr['corp_id'] = $corpId;
             $arr['agent_id'] = config('xxh-sdk.agent.agent_id');
             $arr['name'] = $corpName;
@@ -100,10 +99,10 @@ class IsvService
                 ]);
 
 
-                $corp = Corporation::query()->find($corpId);
-                $contact = Contact::query()->find($authUser->contact_id);
-                $user = User::query()->find($authUser->user_id);
-
+                $corp = Corporation::find($corpId);
+                $contact = Contact::find($authUser->contact_id);
+                $user = User::find($authUser->user_id);
+                // 触发事件
                 event(new Installed($corp, $user, $contact));
 
                 DB::commit();
@@ -112,7 +111,7 @@ class IsvService
 
             }
         } catch (\Throwable $throwable) {
-            Log::info($throwable->getMessage(), ['exception' => $throwable]);
+            Log::error($throwable->getMessage(), ['exception' => $throwable]);
             DB::rollBack();
         }
 
@@ -132,12 +131,12 @@ class IsvService
                 ['agent_id', config('auth.agent.agent_id')]
             ])->delete();
 
-            $corp = Corporation::query()->find($eventMsg->CorpId);
+            $corp = Corporation::find($eventMsg->CorpId);
             event(new Uninstalled($corp));
             return 'success';
 
         } catch (\Throwable $throwable) {
-            Log::info($throwable->getMessage(), ['exception' => $throwable]);
+            Log::error($throwable->getMessage(), ['exception' => $throwable]);
 
         }
 
