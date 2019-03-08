@@ -53,7 +53,7 @@ class FileService extends BaseService
                 'md5' => $result['md5'] ?? '',
                 'sha1' => $result['sha1'] ?? '',
                 'is_image' => $result['is_image'] ?? 0,
-                'corp_id' => $corpId
+                'corp_id' => $result['corp_id']
             ])->save();
             // 触发上传后事件
             event(new Uploaded($attachment));
