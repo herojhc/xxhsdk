@@ -14,13 +14,16 @@ use XinXiHua\SDK\Exceptions\ApiException;
 class CorporationService extends BaseService
 {
     /**
+     * @param array $include
      * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function details($corpId = null)
+    public function details($include = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/corporation/details');
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/corporation/details', [
+            'include' => implode(',', $include)
+        ]);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
