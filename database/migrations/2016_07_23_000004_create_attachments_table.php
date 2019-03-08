@@ -29,7 +29,7 @@ class CreateAttachmentsTable extends Migration
             $table->boolean('is_image')->default(0);
             $table->text('url')->nullable();
             $table->integer('platform_attachment_id');
-            $table->integer('corp_id');
+            $table->integer('corp_id')->default(0);
             $table->timestamps();
         });
     }

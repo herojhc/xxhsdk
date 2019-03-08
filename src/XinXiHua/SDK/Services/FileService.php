@@ -52,7 +52,8 @@ class FileService extends BaseService
                 'size' => $file->getSize(),
                 'md5' => $result['md5'] ?? '',
                 'sha1' => $result['sha1'] ?? '',
-                'is_image' => $result['is_image'] ?? 0
+                'is_image' => $result['is_image'] ?? 0,
+                'corp_id' => $corpId
             ])->save();
             // 触发上传后事件
             event(new Uploaded($attachment));
