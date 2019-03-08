@@ -106,14 +106,14 @@ class AccessToken
             if ($permanentCode) {
 
                 $response = $this->postRequestAccessToken($this->getOAuthGrantRequestData($authCorpId, $permanentCode->permanent_code));
-
-                Log::info('rest数据返回', ['rest' => $response->getResponse()]);
                 // handle access token
                 if ($response->getResponse()->getStatusCode() != 200) {
                     throw new \RuntimeException('Failed to get access token for corporation [' . $authCorpId . ']!');
                 }
 
                 $result = $response->getResponseData();
+                // 记录返回值
+                Log::debug('restResponse', ['response' => $result]);
 
                 if (!isset($result['data']['access_token'])) {
                     throw new \RuntimeException('"access_token" is not exists in the response data!');

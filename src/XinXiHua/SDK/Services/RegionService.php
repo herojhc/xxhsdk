@@ -6,9 +6,8 @@
  * Time: 9:34
  */
 
-namespace XinXiHua\SDK\Services\V1;
+namespace XinXiHua\SDK\Services;
 
-use XinXiHua\SDK\Services\BaseService;
 
 class RegionService extends BaseService
 {
@@ -19,7 +18,7 @@ class RegionService extends BaseService
      */
     public function getProvinces($corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('v1/provinces');
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/provinces');
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -33,7 +32,7 @@ class RegionService extends BaseService
      */
     public function getCities($provinceId, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('v1/provinces/' . $provinceId . '/cities');
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/provinces/' . $provinceId . '/cities');
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -47,7 +46,7 @@ class RegionService extends BaseService
      */
     public function getAreas($cityId, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('v1/cities/' . $cityId . '/areas');
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/cities/' . $cityId . '/areas');
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }

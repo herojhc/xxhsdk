@@ -6,13 +6,12 @@
  * Time: 11:53
  */
 
-namespace XinXiHua\SDK\Services\V1;
+namespace XinXiHua\SDK\Services;
 
 use Illuminate\Http\UploadedFile;
 use XinXiHua\SDK\Events\Uploaded;
 use XinXiHua\SDK\Exceptions\ApiException;
 use XinXiHua\SDK\Models\Attachment;
-use XinXiHua\SDK\Services\BaseService;
 
 class FileService extends BaseService
 {
@@ -28,7 +27,7 @@ class FileService extends BaseService
     {
 
         // 调用存储API
-        $url = 'v1/files';
+        $url = 'files';
         if (!empty($type)) {
             $url .= '?type=' . $type;
         }
@@ -40,20 +39,20 @@ class FileService extends BaseService
 
         if ($response->isResponseSuccess()) {
 
-            $file = $response->getResponseData()['data'];
+            $result = $response->getResponseData()['data'];
             // 这里入库，返回本地信息
             $attachment = new Attachment();
             $attachment->forceFill([
-                'platform_attachment_id' => $file['platform_attachment_id'],
-                'filename' => $file['filename'],
-                'original_name' => $file['original_name'],
-                'real_path' => $file['real_path'],
-                'url' => $file['url'],
-                'mime' => $file['mime'] ?? '',
-                'size' => $file['size'] ?? 0,
-                'md5' => $file['md5'] ?? '',
-                'sha1' => $file['sha1'] ?? '',
-                'is_image' => $file['is_image'] ?? 0
+                'platform_attachment_id' => $result['platform_attachment_id'],
+                'filename' => $result['filename'],
+                'original_name' => $result['original_name'],
+                'real_path' => $result['real_path'],
+                'url' => $result['url'],
+                'mime' => $result['mime'] ?? '',
+                'size' => $file->getSize(),
+                'md5' => $result['md5'] ?? '',
+                'sha1' => $result['sha1'] ?? '',
+                'is_image' => $result['is_image'] ?? 0
             ])->save();
             // 触发上传后事件
             event(new Uploaded($attachment));

@@ -2,17 +2,17 @@
 /**
  * Created by PhpStorm.
  * User: JHC
- * Date: 2019-02-02
- * Time: 10:13
+ * Date: 2018-07-06
+ * Time: 10:51
  */
 
-namespace XinXiHua\SDK\Services\V1;
+namespace XinXiHua\SDK\Services;
 
 use XinXiHua\SDK\Exceptions\ApiException;
-use XinXiHua\SDK\Services\BaseService;
 
-class StoreService extends BaseService
+class ProductCorpCategoryService extends BaseService
 {
+
     /**
      * @param $data
      * @param null $corpId
@@ -21,10 +21,12 @@ class StoreService extends BaseService
      */
     public function store($data, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/v1/stores', $data);
+
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/product/corp/categories', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
+
         throw new ApiException($response->getResponseMessage());
 
     }
@@ -39,11 +41,13 @@ class StoreService extends BaseService
     public function update($data, $id, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/v1/stores/' . $id, $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/product/corp/categories/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
+
         throw new ApiException($response->getResponseMessage());
+
     }
 
     /**
@@ -54,10 +58,12 @@ class StoreService extends BaseService
      */
     public function destroy($id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/v1/stores/' . $id);
+
+        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/product/corp/categories/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }
         throw new ApiException($response->getResponseMessage());
     }
+
 }

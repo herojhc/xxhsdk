@@ -6,11 +6,10 @@
  * Time: 10:38
  */
 
-namespace XinXiHua\SDK\Services\V1;
+namespace XinXiHua\SDK\Services;
 
 
 use XinXiHua\SDK\Exceptions\ApiException;
-use XinXiHua\SDK\Services\BaseService;
 
 class InviteService extends BaseService
 {
@@ -34,7 +33,7 @@ class InviteService extends BaseService
      */
     public function store($data, $attention = 0, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/v1/invites?attention=' . $attention, $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/invites?attention=' . $attention, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -50,7 +49,7 @@ class InviteService extends BaseService
      */
     public function show($id, $corpId)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/v1/invites/' . $id);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/invites/' . $id);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }

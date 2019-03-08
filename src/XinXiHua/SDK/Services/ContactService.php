@@ -6,10 +6,9 @@
  * Time: 11:51
  */
 
-namespace XinXiHua\SDK\Services\V1;
+namespace XinXiHua\SDK\Services;
 
 use XinXiHua\SDK\Exceptions\ApiException;
-use XinXiHua\SDK\Services\BaseService;
 
 class ContactService extends BaseService
 {
@@ -22,7 +21,7 @@ class ContactService extends BaseService
      */
     public function all($corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/v1/contacts');
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts');
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -39,7 +38,7 @@ class ContactService extends BaseService
      */
     public function paginate($page = 1, $limit = 20, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/v1/contacts', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts', [
             'page' => $page,
             'limit' => $limit
         ]);
@@ -57,7 +56,7 @@ class ContactService extends BaseService
      */
     public function show($id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/v1/contacts/' . $id);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts/' . $id);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -73,7 +72,7 @@ class ContactService extends BaseService
      */
     public function store($data, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/v1/contacts', $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/contacts', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -90,7 +89,7 @@ class ContactService extends BaseService
      */
     public function update($data, $id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/v1/contacts/' . $id, $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/contacts/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -107,7 +106,7 @@ class ContactService extends BaseService
      */
     public function invite($id, $attention = 0, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/v1/contacts/' . $id . '/invite', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts/' . $id . '/invite', [
             'attention' => $attention
         ]);
         if ($response->isResponseSuccess()) {

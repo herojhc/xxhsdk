@@ -58,7 +58,7 @@ return array(
         /**
          * Default Service
          */
-        'default_service_name' => 'api',
+        'default_service_name' => 'v1',
 
         /**
          * Services
@@ -68,7 +68,7 @@ return array(
             // environment: dev
             'dev' => [
 
-                'api' => [
+                'v1' => [
 
                     'base_uri' => env('REST_CLIENT_API_URL', ''),
                     'headers' => [
@@ -82,7 +82,7 @@ return array(
             // environment: production
             'production' => [
 
-                'api' => [
+                'v1' => [
 
                     'base_uri' => env('REST_CLIENT_API_URL', ''),
                     'headers' => [
