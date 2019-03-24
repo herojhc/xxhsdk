@@ -14,6 +14,21 @@ class ProductCorpCategoryService extends BaseService
 {
 
     /**
+     * @param null $corpId
+     * @return mixed
+     * @throws ApiException
+     */
+    public function all($corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/product/corp/categories');
+        if ($response->isResponseSuccess()) {
+            return $response->getResponseData()['data'];
+        }
+        throw new ApiException($response->getResponseMessage());
+
+    }
+
+    /**
      * @param $data
      * @param null $corpId
      * @return mixed
