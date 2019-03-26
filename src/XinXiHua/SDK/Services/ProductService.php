@@ -117,4 +117,42 @@ class ProductService extends BaseService
 
         throw new ApiException($response->getResponseMessage());
     }
+
+    /**
+     * @param int $id
+     * @param array $platform
+     * @param null $corpId
+     * @return bool
+     * @throws ApiException
+     */
+    public function online(int $id, array $platform = [], $corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/products/' . $id . '/online', [
+            'platform' => $platform
+        ]);
+        if ($response->isResponseSuccess()) {
+            return true;
+        }
+
+        throw new ApiException($response->getResponseMessage());
+    }
+
+    /**
+     * @param int $id
+     * @param int $platformId
+     * @param null $corpId
+     * @return bool
+     * @throws ApiException
+     */
+    public function offline(int $id, $platformId = 0, $corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/products/' . $id . '/offline', [
+            'platform_corp_id' => $platformId
+        ]);
+        if ($response->isResponseSuccess()) {
+            return true;
+        }
+
+        throw new ApiException($response->getResponseMessage());
+    }
 }
