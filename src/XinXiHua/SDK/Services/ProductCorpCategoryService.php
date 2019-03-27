@@ -14,13 +14,16 @@ class ProductCorpCategoryService extends BaseService
 {
 
     /**
+     * @param string $indexType
      * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function all($corpId = null)
+    public function all($indexType = 'index', $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/product/corp/categories');
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/product/corp/categories', [
+            'indexType' => $indexType
+        ]);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
