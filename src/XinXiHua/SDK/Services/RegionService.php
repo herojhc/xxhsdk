@@ -12,6 +12,17 @@ namespace XinXiHua\SDK\Services;
 class RegionService extends BaseService
 {
 
+    public function all($columns = ['*'], $corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/regions', [
+            'columns' => $columns
+        ]);
+        if ($response->isResponseSuccess()) {
+            return $response->getResponseData()['data'];
+        }
+        return [];
+    }
+
     /**
      * @param null $corpId
      * @return array
