@@ -82,7 +82,7 @@ class OrderService extends BaseService
      * @return mixed
      * @throws ApiException
      */
-    public function deliver($id, $deliverInfo, $corpId = null)
+    public function deliver($id, $deliverInfo = [], $corpId = null)
     {
         $response = $this->accessToken->getIsvCorpClient($corpId)->post('/orders/' . $id . '/deliver', $deliverInfo);
         if ($response->isResponseSuccess()) {
