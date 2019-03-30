@@ -90,4 +90,20 @@ class OrderService extends BaseService
         }
         throw new ApiException($response->getResponseMessage());
     }
+
+    /**
+     * @param $id
+     * @param $address
+     * @param null $corpId
+     * @return mixed
+     * @throws ApiException
+     */
+    public function address($id, $address, $corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/orders/' . $id . '/address', $address);
+        if ($response->isResponseSuccess()) {
+            return $id;
+        }
+        throw new ApiException($response->getResponseMessage());
+    }
 }
