@@ -34,7 +34,7 @@ class FileService extends BaseService
 
         $response = $this->accessToken->getIsvCorpClient($corpId)->postMultipartSimple($url, [
             'name' => $file->getClientOriginalName(),
-            'attachment' => fopen($file, 'r')// 这里无需关闭，STEAM 自动关闭
+            'attachment' => fopen($file, 'r')// 这里无需关闭，STREAM 自动关闭
         ]);
 
         if ($response->isResponseSuccess()) {
@@ -43,6 +43,7 @@ class FileService extends BaseService
             // 这里入库，返回本地信息
             $attachment = new Attachment();
             $attachment->forceFill([
+                'id' => $result['platform_attachment_id'],// 保持和平台ID一致
                 'platform_attachment_id' => $result['platform_attachment_id'],
                 'filename' => $result['filename'],
                 'original_name' => $result['original_name'],

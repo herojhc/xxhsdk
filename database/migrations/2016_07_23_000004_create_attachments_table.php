@@ -18,7 +18,8 @@ class CreateAttachmentsTable extends Migration
         }
 
         Schema::create('attachments', function (Blueprint $table) {
-            $table->increments('id');
+            $table->integer('id');
+            $table->primary('id');
             $table->string('filename', 200)->default('')->comment('保存文件名');
             $table->string('original_name', '200')->default('')->comment('原始文件名');
             $table->string('real_path', 200)->default('')->comment('保存路径');
