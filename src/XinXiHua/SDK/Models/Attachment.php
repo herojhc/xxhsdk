@@ -16,6 +16,8 @@ class Attachment extends Model
 
     protected $primaryKey = 'id';
 
+    public $incrementing = false;
+
     protected $fillable = [
         'filename',
         'original_name',

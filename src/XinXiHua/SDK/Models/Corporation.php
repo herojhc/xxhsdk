@@ -15,6 +15,7 @@ class Corporation extends Model
 {
     protected $primaryKey = 'corp_id';
 
+    public $incrementing = false;
     /**
      * The attributes that are mass assignable.
      *

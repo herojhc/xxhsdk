@@ -15,6 +15,8 @@ class User extends Model
 {
     protected $primaryKey = 'user_id';
 
+    public $incrementing = false;
+
     /**
      * The attributes that are mass assignable.
      *

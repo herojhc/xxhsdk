@@ -16,6 +16,7 @@ class Contact extends Model
 
     protected $primaryKey = 'contact_id';
 
+    public $incrementing = false;
     /**
      * The attributes that are mass assignable.
      *
