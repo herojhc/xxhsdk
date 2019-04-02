@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: JHC
- * Date: 2019-03-28
- * Time: 11:48
+ * Date: 2019-04-02
+ * Time: 17:53
  */
 
 namespace XinXiHua\SDK\Services;
@@ -11,7 +11,7 @@ namespace XinXiHua\SDK\Services;
 
 use XinXiHua\SDK\Exceptions\ApiException;
 
-class LinkmanService extends BaseService
+class WorkOrderCategoryService extends BaseService
 {
 
     /**
@@ -22,7 +22,7 @@ class LinkmanService extends BaseService
      */
     public function store($data, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/linkmen', $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/work/categories', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -40,7 +40,7 @@ class LinkmanService extends BaseService
     public function update($data, $id, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/linkmen/' . $id, $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/work/categories' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -56,7 +56,7 @@ class LinkmanService extends BaseService
      */
     public function destroy($id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/linkmen/' . $id);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/work/categories' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }
