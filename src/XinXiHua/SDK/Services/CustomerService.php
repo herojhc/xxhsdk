@@ -30,6 +30,22 @@ class CustomerService extends BaseService
     }
 
     /**
+     * @param $rows
+     * @param null $corpId
+     * @return mixed
+     * @throws ApiException
+     */
+    public function import($rows, $corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/customers?storeType=import', $rows);
+        if ($response->isResponseSuccess()) {
+            return true;
+        }
+        throw new ApiException($response->getResponseMessage());
+
+    }
+
+    /**
      * @param $data
      * @param $id
      * @param null $corpId
