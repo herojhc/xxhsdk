@@ -23,7 +23,10 @@ class PartnerService extends BaseService
      */
     public function sendVerifyCode($partner, $type = 'code', $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/partners/' . $partner . '/verify-code?type=' . $type);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/partners/verify-code', [
+            'partner' => $partner,
+            'type' => $type
+        ]);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }

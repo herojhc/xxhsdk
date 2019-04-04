@@ -23,7 +23,10 @@ class PlatformService extends BaseService
      */
     public function apply($platform, $type = 'code', $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/platforms/' . $platform . '/apply?type=' . $type);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/platforms/apply', [
+            'platform' => $platform,
+            'type' => $type
+        ]);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
