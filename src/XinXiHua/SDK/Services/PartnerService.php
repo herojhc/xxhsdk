@@ -32,15 +32,16 @@ class PartnerService extends BaseService
     }
 
     /**
+     * @param $action
      * @param $partnerId
      * @param $data
      * @param null $corpId
      * @return bool
      * @throws ApiException
      */
-    public function sign($partnerId, $data, $corpId = null)
+    public function sign($action, $partnerId, $data = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/partners/' . $partnerId . '/sign', $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/partners/' . $partnerId . '/sign?action=' . $action, $data);
         if ($response->isResponseSuccess()) {
             return true;
         }
