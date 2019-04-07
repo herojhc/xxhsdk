@@ -28,9 +28,13 @@ class Corporation extends Model
         'logo',
         'tel',
         'introduce',
+        'province_id',
+        'city_id',
         'province',
         'city',
+        'address',
         'level',
+        'is_verified',
         'type',// 1个人2企业
         'status'
     ];

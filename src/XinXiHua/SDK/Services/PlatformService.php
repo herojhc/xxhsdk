@@ -48,4 +48,19 @@ class PlatformService extends BaseService
         }
         throw new ApiException($response->getResponseMessage());
     }
+
+    /**
+     * @param $platformId
+     * @param null $corpId
+     * @return bool
+     * @throws ApiException
+     */
+    public function destroy($platformId, $corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/platforms/' . $platformId);
+        if ($response->isResponseSuccess()) {
+            return true;
+        }
+        throw new ApiException($response->getResponseMessage());
+    }
 }

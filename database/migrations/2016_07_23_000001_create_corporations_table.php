@@ -27,8 +27,12 @@ class CreateCorporationsTable extends Migration
             $table->string('tel', 20)->default('')->nullable();
             $table->string('email', 100)->default('')->nullable();
             $table->string('introduce', 150)->default('')->nullable();
-            $table->integer('province')->default(0);
-            $table->integer('city')->default(0);
+            $table->string('province')->nullable();
+            $table->integer('province_id')->default(0)->nullable();
+            $table->string('city')->nullable();
+            $table->integer('city_id')->default(0)->nullable();
+            $table->string('address')->nullable();
+            $table->boolean('is_verified')->default(0);
             $table->smallInteger('type')->default(0);// 租户类型 1 个人 2 租户
             $table->integer('level')->default(0);// 租户的等级
             $table->integer('role_id')->default(0);// 租户的角色（管理员的角色）

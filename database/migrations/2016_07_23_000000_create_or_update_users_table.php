@@ -41,9 +41,13 @@ class CreateOrUpdateUsersTable extends Migration
                 'avatar',
                 'gender',
                 'birthday',
+                'country_id',
                 'country',
+                'province_id',
                 'province',
+                'city_id',
                 'city',
+                'address',
                 'timezone',
                 'locale',
                 'mobile',
@@ -104,17 +108,32 @@ class CreateOrUpdateUsersTable extends Migration
             $birthday->change();
         }
 
-        $country = $table->char('country', 2)->default('ZH')->nullable()->comment('国家');
+        $country_id = $table->integer('country_id', 2)->default(0)->nullable();
+        if (Schema::hasColumn('users', 'country_id')) {
+            $country_id->change();
+        }
+
+        $province_id = $table->integer('province_id', 2)->default(0)->nullable();
+        if (Schema::hasColumn('users', 'province_id')) {
+            $province_id->change();
+        }
+
+        $city_id = $table->integer('city_id', 2)->default(0)->nullable();
+        if (Schema::hasColumn('users', 'city_id')) {
+            $city_id->change();
+        }
+
+        $country = $table->string('country')->default('中国')->nullable()->comment('国家');
         if (Schema::hasColumn('users', 'country')) {
             $country->change();
         }
 
-        $province = $table->char('province', 6)->default('')->nullable()->comment('省份');
+        $province = $table->string('province')->default('')->nullable()->comment('省份');
         if (Schema::hasColumn('users', 'province')) {
             $province->change();
         }
 
-        $city = $table->char('city', 6)->default('')->nullable()->comment('城市');
+        $city = $table->string('city')->default('')->nullable()->comment('城市');
         if (Schema::hasColumn('users', 'city')) {
             $city->change();
         }
