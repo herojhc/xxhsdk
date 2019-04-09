@@ -106,4 +106,19 @@ class OrderService extends BaseService
         }
         throw new ApiException($response->getResponseMessage());
     }
+
+    /**
+     * @param $id
+     * @param null $corpId
+     * @return mixed
+     * @throws ApiException
+     */
+    public function pay($id, $corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/orders/' . $id . '/pay');
+        if ($response->isResponseSuccess()) {
+            return $response->getResponseData()['data'];
+        }
+        throw new ApiException($response->getResponseMessage());
+    }
 }
