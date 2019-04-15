@@ -109,13 +109,15 @@ class OrderService extends BaseService
 
     /**
      * @param $id
+     * @param string $tradeType
+     * @param array $payInfo
      * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function pay($id, $corpId = null)
+    public function pay($id, $tradeType = 'MOBILE', $payInfo = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/orders/' . $id . '/pay');
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/orders/' . $id . '/pay?tradeType=' . $tradeType, $payInfo);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }

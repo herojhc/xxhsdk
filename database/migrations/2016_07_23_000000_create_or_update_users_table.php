@@ -98,7 +98,7 @@ class CreateOrUpdateUsersTable extends Migration
             $avatar->change();
         }
 
-        $gender = $table->char('gender', 1)->nullable()->comment('性别1男2女0保密');
+        $gender = $table->string('gender', 1)->nullable()->comment('性别1男2女0保密');
         if (Schema::hasColumn('users', 'gender')) {
             $gender->change();
         }
@@ -108,17 +108,17 @@ class CreateOrUpdateUsersTable extends Migration
             $birthday->change();
         }
 
-        $country_id = $table->integer('country_id', 2)->default(0)->nullable();
+        $country_id = $table->integer('country_id')->default(0)->nullable();
         if (Schema::hasColumn('users', 'country_id')) {
             $country_id->change();
         }
 
-        $province_id = $table->integer('province_id', 2)->default(0)->nullable();
+        $province_id = $table->integer('province_id')->default(0)->nullable();
         if (Schema::hasColumn('users', 'province_id')) {
             $province_id->change();
         }
 
-        $city_id = $table->integer('city_id', 2)->default(0)->nullable();
+        $city_id = $table->integer('city_id')->default(0)->nullable();
         if (Schema::hasColumn('users', 'city_id')) {
             $city_id->change();
         }
