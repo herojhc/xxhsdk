@@ -65,4 +65,21 @@ class PartnerService extends BaseService
         }
         throw new ApiException($response->getResponseMessage());
     }
+
+    /**
+     * @param $ids
+     * @param null $corpId
+     * @return bool
+     * @throws ApiException
+     */
+    public function batchCheck($ids, $corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/partners/batch', [
+            'check' => $ids
+        ]);
+        if ($response->isResponseSuccess()) {
+            return true;
+        }
+        throw new ApiException($response->getResponseMessage());
+    }
 }
