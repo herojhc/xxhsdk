@@ -119,6 +119,46 @@ class ProductService extends BaseService
     }
 
     /**
+     * @param array $ids
+     * @param array $platform
+     * @param null $corpId
+     * @return bool
+     * @throws ApiException
+     */
+    public function batchOnline(array $ids, array $platform = [], $corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/products/batch', [
+            'online' => $ids,
+            'platform' => $platform
+        ]);
+        if ($response->isResponseSuccess()) {
+            return true;
+        }
+
+        throw new ApiException($response->getResponseMessage());
+    }
+
+    /**
+     * @param array $ids
+     * @param int $platformId
+     * @param null $corpId
+     * @return bool
+     * @throws ApiException
+     */
+    public function batchOffline(array $ids, int $platformId = 0, $corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/products/batch', [
+            'offline' => $ids,
+            'platform_id' => $platformId
+        ]);
+        if ($response->isResponseSuccess()) {
+            return true;
+        }
+
+        throw new ApiException($response->getResponseMessage());
+    }
+
+    /**
      * @param int $id
      * @param array $platform
      * @param null $corpId
