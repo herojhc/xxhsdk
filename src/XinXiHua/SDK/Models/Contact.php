@@ -36,6 +36,9 @@ class Contact extends Model
         'user_id',
         'is_admin',
         'is_sub_admin',
-        'is_employee'
+        'is_employee',
+        'is_linkman',
+        'is_supervision',
+        'status'
     ];
 }

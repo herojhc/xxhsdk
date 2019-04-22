@@ -116,4 +116,26 @@ class ContactService extends BaseService
         throw new ApiException($response->getResponseMessage());
     }
 
+
+    /**
+     * @param array $ids
+     * @param bool $clear
+     * @param null $corpId
+     * @return bool
+     * @throws ApiException
+     */
+    public function setSupervision(array $ids, bool $clear = false, $corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts/supervision', [
+            'ids' => $ids,
+            'clear' => $clear
+        ]);
+        if ($response->isResponseSuccess()) {
+            return true;
+        }
+
+        throw new ApiException($response->getResponseMessage());
+    }
+
+
 }
