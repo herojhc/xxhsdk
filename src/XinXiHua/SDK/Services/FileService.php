@@ -63,4 +63,20 @@ class FileService extends BaseService
 
         throw new ApiException($response->getResponseData()['message']);
     }
+
+    /**
+     * @param $id
+     * @param null $corpId
+     * @return mixed
+     * @throws ApiException
+     */
+    public function content($id, $corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/files/' . $id . '/content');
+        if ($response->isResponseSuccess()) {
+            return $response->getResponseData()['data'];
+        }
+
+        throw new ApiException($response->getResponseMessage());
+    }
 }
