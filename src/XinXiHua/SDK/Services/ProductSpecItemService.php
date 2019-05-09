@@ -22,8 +22,7 @@ class ProductSpecItemService extends BaseService
      */
     public function store($specId, $data, $corpId = null)
     {
-
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/product/corp/specs/' . $specId, $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/product/corp/specs/' . $specId . '/items', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -42,7 +41,7 @@ class ProductSpecItemService extends BaseService
     public function update($specId, $data, $id, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/product/corp/specs/' . $specId . $id, $data);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/product/corp/specs/' . $specId . '/items/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -59,7 +58,7 @@ class ProductSpecItemService extends BaseService
     public function destroy($specId, $id, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/product/corp/specs/' . $specId . $id);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/product/corp/specs/' . $specId . '/items/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }
