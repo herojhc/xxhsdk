@@ -15,13 +15,14 @@ class ContactService extends BaseService
 
 
     /**
+     * @param array $criteria
      * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function all($corpId = null)
+    public function all($criteria = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts');
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts', $criteria);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -32,16 +33,17 @@ class ContactService extends BaseService
     /**
      * @param int $page
      * @param int $limit
+     * @param array $criteria
      * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function paginate($page = 1, $limit = 20, $corpId = null)
+    public function paginate($page = 1, $limit = 20, $criteria = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts', array_merge([
             'page' => $page,
             'limit' => $limit
-        ]);
+        ], $criteria));
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
