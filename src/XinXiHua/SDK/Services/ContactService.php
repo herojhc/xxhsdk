@@ -101,6 +101,21 @@ class ContactService extends BaseService
 
     /**
      * @param $id
+     * @param null $corpId
+     * @return mixed
+     * @throws ApiException
+     */
+    public function destroy($id, $corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/contacts/' . $id);
+        if ($response->isResponseSuccess()) {
+            return $id;
+        }
+        throw new ApiException($response->getResponseMessage());
+    }
+
+    /**
+     * @param $id
      * @param int $attention
      * @param null $corpId
      * @return mixed
