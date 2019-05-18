@@ -51,6 +51,25 @@ class ProductService extends BaseService
     }
 
     /**
+     * @param $id
+     * @param array $include
+     * @param null $corpId
+     * @return mixed
+     * @throws ApiException
+     */
+    public function show($id, $include = ['logo'], $corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/products/' . $id, [
+            'include' => implode(',', $include)
+        ]);
+        if ($response->isResponseSuccess()) {
+            return $response->getResponseData()['data'];
+        }
+
+        throw new ApiException($response->getResponseMessage());
+    }
+
+    /**
      * @param $data
      * @param null $corpId
      * @return mixed
