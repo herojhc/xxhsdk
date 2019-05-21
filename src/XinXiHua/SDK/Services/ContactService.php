@@ -16,13 +16,16 @@ class ContactService extends BaseService
 
     /**
      * @param array $criteria
+     * @param array $include
      * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function all($criteria = [], $corpId = null)
+    public function all($criteria = [], $include = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts', $criteria);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts', array_merge([
+            'include' => $include
+        ], $criteria));
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -34,15 +37,17 @@ class ContactService extends BaseService
      * @param int $page
      * @param int $limit
      * @param array $criteria
+     * @param array $include
      * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function paginate($page = 1, $limit = 20, $criteria = [], $corpId = null)
+    public function paginate($page = 1, $limit = 20, $criteria = [], $include = [], $corpId = null)
     {
         $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts', array_merge([
             'page' => $page,
-            'limit' => $limit
+            'limit' => $limit,
+            'include' => $include
         ], $criteria));
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
@@ -52,13 +57,16 @@ class ContactService extends BaseService
 
     /**
      * @param $id
+     * @param array $include
      * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function show($id, $corpId = null)
+    public function show($id, $include = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts/' . $id);
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts/' . $id, [
+            'include' => $include
+        ]);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
