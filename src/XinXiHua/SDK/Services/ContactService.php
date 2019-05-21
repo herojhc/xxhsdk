@@ -24,7 +24,7 @@ class ContactService extends BaseService
     public function all($criteria = [], $include = [], $corpId = null)
     {
         $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts', array_merge([
-            'include' => $include
+            'include' => implode(',', $include)
         ], $criteria));
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
@@ -47,7 +47,7 @@ class ContactService extends BaseService
         $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts', array_merge([
             'page' => $page,
             'limit' => $limit,
-            'include' => $include
+            'include' => implode(',', $include)
         ], $criteria));
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
@@ -65,7 +65,7 @@ class ContactService extends BaseService
     public function show($id, $include = [], $corpId = null)
     {
         $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts/' . $id, [
-            'include' => $include
+            'include' => implode(',', $include)
         ]);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
