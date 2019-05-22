@@ -214,4 +214,24 @@ class ProductService extends BaseService
 
         throw new ApiException($response->getResponseMessage());
     }
+
+    /**
+     * @param array $ids
+     * @param string $content
+     * @param null $corpId
+     * @return bool
+     * @throws ApiException
+     */
+    public function content(array $ids, string $content, $corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/products/content', [
+            'ids' => $ids,
+            'content' => $content
+        ]);
+        if ($response->isResponseSuccess()) {
+            return true;
+        }
+
+        throw new ApiException($response->getResponseMessage());
+    }
 }
