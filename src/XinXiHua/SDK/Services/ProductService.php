@@ -178,6 +178,60 @@ class ProductService extends BaseService
     }
 
     /**
+     * @param array $ids
+     * @param null $corpId
+     * @return bool
+     * @throws ApiException
+     */
+    public function batchCheck(array $ids, $corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/products/batch', [
+            'check' => $ids
+        ]);
+        if ($response->isResponseSuccess()) {
+            return true;
+        }
+
+        throw new ApiException($response->getResponseMessage());
+    }
+
+    /**
+     * @param array $ids
+     * @param null $corpId
+     * @return bool
+     * @throws ApiException
+     */
+    public function batchCancel(array $ids, $corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/products/batch', [
+            'cancel' => $ids
+        ]);
+        if ($response->isResponseSuccess()) {
+            return true;
+        }
+
+        throw new ApiException($response->getResponseMessage());
+    }
+
+    /**
+     * @param array $ids
+     * @param null $corpId
+     * @return bool
+     * @throws ApiException
+     */
+    public function batchRefuse(array $ids, $corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/products/batch', [
+            'refuse' => $ids
+        ]);
+        if ($response->isResponseSuccess()) {
+            return true;
+        }
+
+        throw new ApiException($response->getResponseMessage());
+    }
+
+    /**
      * @param int $id
      * @param array $platform
      * @param null $corpId
