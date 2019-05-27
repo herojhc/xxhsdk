@@ -13,6 +13,23 @@ use XinXiHua\SDK\Exceptions\ApiException;
 
 class CorporationService extends BaseService
 {
+
+    /**
+     * @param null $corpId
+     * @return mixed
+     * @throws ApiException
+     */
+    public function basic($corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/corporation/basic');
+        if ($response->isResponseSuccess()) {
+            return $response->getResponseData()['data'];
+        }
+        throw new ApiException($response->getResponseMessage());
+
+    }
+
+
     /**
      * @param array $include
      * @param null $corpId

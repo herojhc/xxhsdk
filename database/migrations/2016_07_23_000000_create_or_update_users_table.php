@@ -138,6 +138,11 @@ class CreateOrUpdateUsersTable extends Migration
             $city->change();
         }
 
+        $address = $table->string('address')->default('')->nullable()->comment('详细地址');
+        if (Schema::hasColumn('users', 'address')) {
+            $address->change();
+        }
+
         $timezone = $table->string('timezone', 30)->default('PRC')->nullable()->comment('时区');
         if (Schema::hasColumn('users', 'timezone')) {
             $timezone->change();
@@ -168,7 +173,7 @@ class CreateOrUpdateUsersTable extends Migration
             $email_validated->change();
         }
 
-        $email_validated_at = $table->timestamp('email_validated_at')->nullable()->comment('邮箱认证时间');
+        $email_validated_at = $table->dateTime('email_validated_at')->nullable()->comment('邮箱认证时间');
         if (Schema::hasColumn('users', 'email_validated_at')) {
             $email_validated_at->change();
         }
@@ -193,10 +198,6 @@ class CreateOrUpdateUsersTable extends Migration
         $source = $table->smallInteger('source')->default(0)->nullable()->comment('来源');
         if (Schema::hasColumn('users', 'source')) {
             $source->change();
-        }
-
-        if (!Schema::hasColumn('users', 'created_at')) {
-            $table->timestamps();
         }
     }
 }
