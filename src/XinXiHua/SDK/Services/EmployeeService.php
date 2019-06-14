@@ -14,16 +14,17 @@ class EmployeeService extends BaseService
 {
 
     /**
+     * @param array $criteria
      * @param array $include
      * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function all($include = [], $corpId = null)
+    public function all($criteria = [], $include = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/employees', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/employees', array_merge([
             'include' => implode(',', $include)
-        ]);
+        ], $criteria));
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -34,20 +35,21 @@ class EmployeeService extends BaseService
     /**
      * @param int $page
      * @param int $limit
+     * @param array $criteria
      * @param array $include
      * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function paginate($page = 1, $limit = 20, $include = [], $corpId = null)
+    public function paginate($page = 1, $limit = 20, $criteria = [], $include = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/employees', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/employees', array_merge([
             'page' => $page,
             'limit' => $limit,
             'include' => implode(',', $include)
-        ]);
+        ], $criteria));
         if ($response->isResponseSuccess()) {
-            return $response->getResponseData()['data'];
+            return $response->getResponseData();
         }
         throw new ApiException($response->getResponseMessage());
     }

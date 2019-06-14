@@ -38,6 +38,7 @@ class CreateContactsTable extends Migration
             $table->boolean('is_linkman')->default(0)->nullable();
             $table->boolean('is_supervision')->default(0)->nullable();
             $table->string('open_id', 50)->default('')->nullable();
+            $table->dateTime('attention_at')->nullable();
             $table->timestamps();
         });
     }

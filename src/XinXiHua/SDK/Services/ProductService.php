@@ -13,16 +13,17 @@ use XinXiHua\SDK\Exceptions\ApiException;
 class ProductService extends BaseService
 {
     /**
+     * @param array $criteria
      * @param array $include
      * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function all($include = ['logo'], $corpId = null)
+    public function all($criteria = [], $include = ['logo'], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/products', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/products', array_merge([
             'include' => implode(',', $include)
-        ]);
+        ], $criteria));
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -32,20 +33,21 @@ class ProductService extends BaseService
     /**
      * @param int $page
      * @param int $limit
+     * @param array $criteria
      * @param array $include
      * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function paginate($page = 1, $limit = 20, $include = ['logo'], $corpId = null)
+    public function paginate($page = 1, $limit = 20, $criteria = [], $include = ['logo'], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/products', [
+        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/products', array_merge([
             'page' => $page,
             'limit' => $limit,
             'include' => implode(',', $include)
-        ]);
+        ], $criteria));
         if ($response->isResponseSuccess()) {
-            return $response->getResponseData()['data'];
+            return $response->getResponseData();
         }
         throw new ApiException($response->getResponseMessage());
     }

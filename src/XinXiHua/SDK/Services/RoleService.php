@@ -50,7 +50,7 @@ class RoleService extends BaseService
             'include' => implode(',', $include)
         ], $criteria));
         if ($response->isResponseSuccess()) {
-            return $response->getResponseData()['data'];
+            return $response->getResponseData();
         }
         throw new ApiException($response->getResponseMessage());
     }
