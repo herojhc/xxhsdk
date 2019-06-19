@@ -177,5 +177,21 @@ class ContactService extends BaseService
         throw new ApiException($response->getResponseMessage());
     }
 
+    /**
+     * @param $userId
+     * @param null $corpId
+     * @return mixed
+     * @throws ApiException
+     */
+    public function follow($userId, $corpId = null)
+    {
+        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/contacts' . $userId . '/user');
+        if ($response->isResponseSuccess()) {
+            return $response->getResponseData()['data']['id'];
+        }
+
+        throw new ApiException($response->getResponseMessage());
+    }
+
 
 }
