@@ -22,7 +22,7 @@ class ArticleService extends BaseService
      */
     public function all($criteria = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/articles', $criteria);
+        $response = $this->getIsvCorpClient($corpId)->get('/articles', $criteria);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -40,7 +40,7 @@ class ArticleService extends BaseService
      */
     public function paginate($page = 1, $limit = 20, $criteria = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/articles', array_merge([
+        $response = $this->getIsvCorpClient($corpId)->get('/articles', array_merge([
             'page' => $page,
             'limit' => $limit
         ], $criteria));
@@ -58,7 +58,7 @@ class ArticleService extends BaseService
      */
     public function show($id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/articles/' . $id);
+        $response = $this->getIsvCorpClient($corpId)->get('/articles/' . $id);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }

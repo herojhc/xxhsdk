@@ -21,7 +21,7 @@ class CustomerService extends BaseService
      */
     public function store($data, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/customers', $data);
+        $response = $this->getIsvCorpClient($corpId)->post('/customers', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -37,7 +37,7 @@ class CustomerService extends BaseService
      */
     public function import($rows, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/customers?storeType=import', $rows);
+        $response = $this->getIsvCorpClient($corpId)->post('/customers?storeType=import', $rows);
         if ($response->isResponseSuccess()) {
             return true;
         }
@@ -55,7 +55,7 @@ class CustomerService extends BaseService
     public function update($data, $id, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/customers/' . $id, $data);
+        $response = $this->getIsvCorpClient($corpId)->patch('/customers/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -71,7 +71,7 @@ class CustomerService extends BaseService
      */
     public function destroy($id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/customers/' . $id);
+        $response = $this->getIsvCorpClient($corpId)->delete('/customers/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }

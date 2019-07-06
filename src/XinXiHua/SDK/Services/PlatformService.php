@@ -23,7 +23,7 @@ class PlatformService extends BaseService
      */
     public function apply($platform, $type = 'code', $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/platforms/apply', [
+        $response = $this->getIsvCorpClient($corpId)->post('/platforms/apply', [
             'platform' => $platform,
             'type' => $type
         ]);
@@ -42,7 +42,7 @@ class PlatformService extends BaseService
      */
     public function release($platformId, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/platforms/' . $platformId . '/release');
+        $response = $this->getIsvCorpClient($corpId)->post('/platforms/' . $platformId . '/release');
         if ($response->isResponseSuccess()) {
             return true;
         }
@@ -57,7 +57,7 @@ class PlatformService extends BaseService
      */
     public function destroy($platformId, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/platforms/' . $platformId);
+        $response = $this->getIsvCorpClient($corpId)->delete('/platforms/' . $platformId);
         if ($response->isResponseSuccess()) {
             return true;
         }

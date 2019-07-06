@@ -23,7 +23,7 @@ class ContactService extends BaseService
      */
     public function all($criteria = [], $include = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts', array_merge([
+        $response = $this->getIsvCorpClient($corpId)->get('/contacts', array_merge([
             'include' => implode(',', $include)
         ], $criteria));
         if ($response->isResponseSuccess()) {
@@ -44,7 +44,7 @@ class ContactService extends BaseService
      */
     public function paginate($page = 1, $limit = 20, $criteria = [], $include = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts', array_merge([
+        $response = $this->getIsvCorpClient($corpId)->get('/contacts', array_merge([
             'page' => $page,
             'limit' => $limit,
             'include' => implode(',', $include)
@@ -64,7 +64,7 @@ class ContactService extends BaseService
      */
     public function show($id, $include = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts/' . $id, [
+        $response = $this->getIsvCorpClient($corpId)->get('/contacts/' . $id, [
             'include' => implode(',', $include)
         ]);
         if ($response->isResponseSuccess()) {
@@ -82,7 +82,7 @@ class ContactService extends BaseService
      */
     public function store($data, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/contacts', $data);
+        $response = $this->getIsvCorpClient($corpId)->post('/contacts', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -99,7 +99,7 @@ class ContactService extends BaseService
      */
     public function update($data, $id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/contacts/' . $id, $data);
+        $response = $this->getIsvCorpClient($corpId)->patch('/contacts/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -115,7 +115,7 @@ class ContactService extends BaseService
      */
     public function destroy($id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/contacts/' . $id);
+        $response = $this->getIsvCorpClient($corpId)->delete('/contacts/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }
@@ -131,7 +131,7 @@ class ContactService extends BaseService
      */
     public function invite($id, $attention = 0, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts/' . $id . '/invite', [
+        $response = $this->getIsvCorpClient($corpId)->get('/contacts/' . $id . '/invite', [
             'attention' => $attention
         ]);
         if ($response->isResponseSuccess()) {
@@ -151,7 +151,7 @@ class ContactService extends BaseService
      */
     public function setSupervision(array $ids, bool $clear = false, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/contacts/supervision', [
+        $response = $this->getIsvCorpClient($corpId)->post('/contacts/supervision', [
             'ids' => $ids,
             'clear' => $clear
         ]);
@@ -169,7 +169,7 @@ class ContactService extends BaseService
      */
     public function getSupervision($corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/contacts/supervision');
+        $response = $this->getIsvCorpClient($corpId)->get('/contacts/supervision');
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -185,7 +185,7 @@ class ContactService extends BaseService
      */
     public function follow($userId, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/contacts' . $userId . '/user');
+        $response = $this->getIsvCorpClient($corpId)->post('/contacts' . $userId . '/user');
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -193,5 +193,20 @@ class ContactService extends BaseService
         throw new ApiException($response->getResponseMessage());
     }
 
+
+    /**
+     * @param $userId
+     * @return mixed
+     * @throws ApiException
+     */
+    public function getByUserId($userId)
+    {
+        $response = $this->getIsvCorpClient()->get('/contacts/' . $userId . '/user');
+        if ($response->isResponseSuccess()) {
+            return $response->getResponseData()['data'];
+        }
+
+        throw new ApiException($response->getResponseMessage());
+    }
 
 }

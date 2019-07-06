@@ -21,7 +21,7 @@ class BankService extends BaseService
      */
     public function all($corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/banks');
+        $response = $this->getIsvCorpClient($corpId)->get('/banks');
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }

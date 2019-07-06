@@ -21,7 +21,7 @@ class ProductService extends BaseService
      */
     public function all($criteria = [], $include = ['logo'], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/products', array_merge([
+        $response = $this->getIsvCorpClient($corpId)->get('/products', array_merge([
             'include' => implode(',', $include)
         ], $criteria));
         if ($response->isResponseSuccess()) {
@@ -41,7 +41,7 @@ class ProductService extends BaseService
      */
     public function paginate($page = 1, $limit = 20, $criteria = [], $include = ['logo'], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/products', array_merge([
+        $response = $this->getIsvCorpClient($corpId)->get('/products', array_merge([
             'page' => $page,
             'limit' => $limit,
             'include' => implode(',', $include)
@@ -61,7 +61,7 @@ class ProductService extends BaseService
      */
     public function show($id, $include = ['logo'], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/products/' . $id, [
+        $response = $this->getIsvCorpClient($corpId)->get('/products/' . $id, [
             'include' => implode(',', $include)
         ]);
         if ($response->isResponseSuccess()) {
@@ -80,7 +80,7 @@ class ProductService extends BaseService
     public function store($data, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/products', $data);
+        $response = $this->getIsvCorpClient($corpId)->post('/products', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -98,7 +98,7 @@ class ProductService extends BaseService
     public function update($data, $id, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/products/' . $id, $data);
+        $response = $this->getIsvCorpClient($corpId)->patch('/products/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -114,7 +114,7 @@ class ProductService extends BaseService
     public function destroy($id, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/products/' . $id);
+        $response = $this->getIsvCorpClient($corpId)->delete('/products/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }
@@ -129,7 +129,7 @@ class ProductService extends BaseService
      */
     public function batchDestroy(array $ids, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/products/batch', [
+        $response = $this->getIsvCorpClient($corpId)->post('/products/batch', [
             'delete' => $ids
         ]);
         if ($response->isResponseSuccess()) {
@@ -148,7 +148,7 @@ class ProductService extends BaseService
      */
     public function batchOnline(array $ids, array $platform = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/products/batch', [
+        $response = $this->getIsvCorpClient($corpId)->post('/products/batch', [
             'online' => $ids,
             'platform' => $platform
         ]);
@@ -168,7 +168,7 @@ class ProductService extends BaseService
      */
     public function batchOffline(array $ids, int $platformId = 0, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/products/batch', [
+        $response = $this->getIsvCorpClient($corpId)->post('/products/batch', [
             'offline' => $ids,
             'platform_id' => $platformId
         ]);
@@ -187,7 +187,7 @@ class ProductService extends BaseService
      */
     public function batchCheck(array $ids, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/products/batch', [
+        $response = $this->getIsvCorpClient($corpId)->post('/products/batch', [
             'check' => $ids
         ]);
         if ($response->isResponseSuccess()) {
@@ -205,7 +205,7 @@ class ProductService extends BaseService
      */
     public function batchCancel(array $ids, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/products/batch', [
+        $response = $this->getIsvCorpClient($corpId)->post('/products/batch', [
             'cancel' => $ids
         ]);
         if ($response->isResponseSuccess()) {
@@ -223,7 +223,7 @@ class ProductService extends BaseService
      */
     public function batchRefuse(array $ids, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/products/batch', [
+        $response = $this->getIsvCorpClient($corpId)->post('/products/batch', [
             'refuse' => $ids
         ]);
         if ($response->isResponseSuccess()) {
@@ -242,7 +242,7 @@ class ProductService extends BaseService
      */
     public function online(int $id, array $platform = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/products/' . $id . '/online', [
+        $response = $this->getIsvCorpClient($corpId)->post('/products/' . $id . '/online', [
             'platform' => $platform
         ]);
         if ($response->isResponseSuccess()) {
@@ -261,7 +261,7 @@ class ProductService extends BaseService
      */
     public function offline(int $id, $platformId = 0, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/products/' . $id . '/offline', [
+        $response = $this->getIsvCorpClient($corpId)->post('/products/' . $id . '/offline', [
             'platform_corp_id' => $platformId
         ]);
         if ($response->isResponseSuccess()) {
@@ -280,7 +280,7 @@ class ProductService extends BaseService
      */
     public function content(array $ids, string $content, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/products/content', [
+        $response = $this->getIsvCorpClient($corpId)->post('/products/content', [
             'ids' => $ids,
             'content' => $content
         ]);

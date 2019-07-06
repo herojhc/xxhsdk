@@ -23,7 +23,7 @@ class PartnerService extends BaseService
      */
     public function sendVerifyCode($partner, $type = 'code', $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/partners/verify-code', [
+        $response = $this->getIsvCorpClient($corpId)->post('/partners/verify-code', [
             'partner' => $partner,
             'type' => $type
         ]);
@@ -44,7 +44,7 @@ class PartnerService extends BaseService
      */
     public function sign($action, $partnerId, $data = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/partners/' . $partnerId . '/sign?action=' . $action, $data);
+        $response = $this->getIsvCorpClient($corpId)->post('/partners/' . $partnerId . '/sign?action=' . $action, $data);
         if ($response->isResponseSuccess()) {
             return true;
         }
@@ -59,7 +59,7 @@ class PartnerService extends BaseService
      */
     public function release($partnerId, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/partners/' . $partnerId . '/release');
+        $response = $this->getIsvCorpClient($corpId)->post('/partners/' . $partnerId . '/release');
         if ($response->isResponseSuccess()) {
             return true;
         }
@@ -74,7 +74,7 @@ class PartnerService extends BaseService
      */
     public function batchCheck($ids, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/partners/batch', [
+        $response = $this->getIsvCorpClient($corpId)->post('/partners/batch', [
             'check' => $ids
         ]);
         if ($response->isResponseSuccess()) {

@@ -22,7 +22,7 @@ class WechatService extends BaseService
      */
     public function qrcodeForTemporary($sceneStr, $expireSeconds, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/wechat/qrcodes/temporary', [
+        $response = $this->getIsvCorpClient($corpId)->post('/wechat/qrcodes/temporary', [
             'scene_str' => $sceneStr,
             'expire_seconds' => $expireSeconds
         ]);
@@ -43,7 +43,7 @@ class WechatService extends BaseService
      */
     public function sendCustomMessage($toId, array $content, $msgType = 'text', $kfId = 0, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/wechat/custom/message', [
+        $response = $this->getIsvCorpClient($corpId)->post('/wechat/custom/message', [
             'kf_id' => $kfId,
             'to_id' => $toId,
             'content' => $content,

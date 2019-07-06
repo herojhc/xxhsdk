@@ -21,7 +21,7 @@ class AgentService extends BaseService
      */
     public function installed($corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/agents');
+        $response = $this->getIsvCorpClient($corpId)->get('/agents');
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }

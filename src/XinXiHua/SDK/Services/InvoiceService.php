@@ -24,7 +24,7 @@ class InvoiceService extends BaseService
      */
     public function store($orderId, $data, $attention = 0, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/orders/' . $orderId . '/invoice', $data);
+        $response = $this->getIsvCorpClient($corpId)->post('/orders/' . $orderId . '/invoice', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -40,7 +40,7 @@ class InvoiceService extends BaseService
      */
     public function destroy($id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/invoices/' . $id);
+        $response = $this->getIsvCorpClient($corpId)->delete('/invoices/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }

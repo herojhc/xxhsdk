@@ -21,7 +21,7 @@ class AccountService extends BaseService
      */
     public function all($corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/accounts');
+        $response = $this->getIsvCorpClient($corpId)->get('/accounts');
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -38,7 +38,7 @@ class AccountService extends BaseService
      */
     public function store($data, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/accounts', $data);
+        $response = $this->getIsvCorpClient($corpId)->post('/accounts', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -55,7 +55,7 @@ class AccountService extends BaseService
      */
     public function update($data, $id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/accounts/' . $id, $data);
+        $response = $this->getIsvCorpClient($corpId)->patch('/accounts/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -71,7 +71,7 @@ class AccountService extends BaseService
     public function destroy($id, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/accounts/' . $id);
+        $response = $this->getIsvCorpClient($corpId)->delete('/accounts/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }

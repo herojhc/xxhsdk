@@ -21,7 +21,7 @@ class TagService extends BaseService
      */
     public function store($data, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/tags', $data);
+        $response = $this->getIsvCorpClient($corpId)->post('/tags', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -39,7 +39,7 @@ class TagService extends BaseService
     public function update($data, $id, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/tags/' . $id, $data);
+        $response = $this->getIsvCorpClient($corpId)->patch('/tags/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -54,7 +54,7 @@ class TagService extends BaseService
      */
     public function destroy($id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/tags/' . $id);
+        $response = $this->getIsvCorpClient($corpId)->delete('/tags/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }
@@ -69,7 +69,7 @@ class TagService extends BaseService
      */
     public function batchDestroy(array $ids, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/tags/batch', [
+        $response = $this->getIsvCorpClient($corpId)->post('/tags/batch', [
             'delete' => $ids
         ]);
         if ($response->isResponseSuccess()) {

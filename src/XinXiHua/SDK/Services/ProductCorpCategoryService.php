@@ -21,7 +21,7 @@ class ProductCorpCategoryService extends BaseService
      */
     public function all($indexType = 'index', $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/product/corp/categories', [
+        $response = $this->getIsvCorpClient($corpId)->get('/product/corp/categories', [
             'indexType' => $indexType
         ]);
         if ($response->isResponseSuccess()) {
@@ -40,7 +40,7 @@ class ProductCorpCategoryService extends BaseService
     public function store($data, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/product/corp/categories', $data);
+        $response = $this->getIsvCorpClient($corpId)->post('/product/corp/categories', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -59,7 +59,7 @@ class ProductCorpCategoryService extends BaseService
     public function update($data, $id, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/product/corp/categories/' . $id, $data);
+        $response = $this->getIsvCorpClient($corpId)->patch('/product/corp/categories/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -77,7 +77,7 @@ class ProductCorpCategoryService extends BaseService
     public function destroy($id, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/product/corp/categories/' . $id);
+        $response = $this->getIsvCorpClient($corpId)->delete('/product/corp/categories/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }

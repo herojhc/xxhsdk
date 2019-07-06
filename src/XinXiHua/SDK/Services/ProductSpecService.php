@@ -22,7 +22,7 @@ class ProductSpecService extends BaseService
     public function store($data, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/product/corp/specs', $data);
+        $response = $this->getIsvCorpClient($corpId)->post('/product/corp/specs', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -40,7 +40,7 @@ class ProductSpecService extends BaseService
     public function update($data, $id, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/product/corp/specs/' . $id, $data);
+        $response = $this->getIsvCorpClient($corpId)->patch('/product/corp/specs/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -56,7 +56,7 @@ class ProductSpecService extends BaseService
     public function destroy($id, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/product/corp/specs/' . $id);
+        $response = $this->getIsvCorpClient($corpId)->delete('/product/corp/specs/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }

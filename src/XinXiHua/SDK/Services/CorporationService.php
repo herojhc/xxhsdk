@@ -21,7 +21,7 @@ class CorporationService extends BaseService
      */
     public function basic($corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/corporation/basic');
+        $response = $this->getIsvCorpClient($corpId)->get('/corporation/basic');
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -38,7 +38,7 @@ class CorporationService extends BaseService
      */
     public function details($include = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/corporation/details', [
+        $response = $this->getIsvCorpClient($corpId)->get('/corporation/details', [
             'include' => implode(',', $include)
         ]);
         if ($response->isResponseSuccess()) {

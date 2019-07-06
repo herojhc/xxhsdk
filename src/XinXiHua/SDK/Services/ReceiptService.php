@@ -22,7 +22,7 @@ class ReceiptService extends BaseService
      */
     public function store($data, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/receipts', $data);
+        $response = $this->getIsvCorpClient($corpId)->post('/receipts', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -38,7 +38,7 @@ class ReceiptService extends BaseService
      */
     public function pay($id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/receipts/' . $id . '/pay');
+        $response = $this->getIsvCorpClient($corpId)->post('/receipts/' . $id . '/pay');
         if ($response->isResponseSuccess()) {
             return $id;
         }
@@ -53,7 +53,7 @@ class ReceiptService extends BaseService
      */
     public function destroy($id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/receipts/' . $id);
+        $response = $this->getIsvCorpClient($corpId)->delete('/receipts/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }

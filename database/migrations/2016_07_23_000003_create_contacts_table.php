@@ -30,7 +30,7 @@ class CreateContactsTable extends Migration
             $table->string('code', 50);
             $table->string('name', 20);
             $table->string('mobile', 20)->default('')->nullable();
-            $table->string('email', 20)->default('')->nullable();
+            $table->string('email', 255)->default('')->nullable();
             $table->boolean('status')->default(0);
             $table->boolean('is_employee')->default(0);
             $table->boolean('is_admin')->default(0);

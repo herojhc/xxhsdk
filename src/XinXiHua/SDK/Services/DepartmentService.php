@@ -22,7 +22,7 @@ class DepartmentService extends BaseService
      */
     public function all($criteria = [], $include = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/departments', array_merge([
+        $response = $this->getIsvCorpClient($corpId)->get('/departments', array_merge([
             'include' => implode(',', $include)
         ]), $criteria);
         if ($response->isResponseSuccess()) {
@@ -43,7 +43,7 @@ class DepartmentService extends BaseService
      */
     public function paginate($page = 1, $limit = 20, $criteria = [], $include = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/departments', array_merge([
+        $response = $this->getIsvCorpClient($corpId)->get('/departments', array_merge([
             'page' => $page,
             'limit' => $limit,
             'include' => implode(',', $include)
@@ -63,7 +63,7 @@ class DepartmentService extends BaseService
      */
     public function show($id, $include = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/departments/' . $id, [
+        $response = $this->getIsvCorpClient($corpId)->get('/departments/' . $id, [
             'include' => implode(',', $include)
         ]);
         if ($response->isResponseSuccess()) {
@@ -82,7 +82,7 @@ class DepartmentService extends BaseService
      */
     public function store($data, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/departments', $data);
+        $response = $this->getIsvCorpClient($corpId)->post('/departments', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -101,7 +101,7 @@ class DepartmentService extends BaseService
     public function update($data, $id, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/departments/' . $id, $data);
+        $response = $this->getIsvCorpClient($corpId)->patch('/departments/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -118,7 +118,7 @@ class DepartmentService extends BaseService
      */
     public function destroy($id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/departments/' . $id);
+        $response = $this->getIsvCorpClient($corpId)->delete('/departments/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }

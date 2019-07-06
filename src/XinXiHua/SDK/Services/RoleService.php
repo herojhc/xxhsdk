@@ -23,7 +23,7 @@ class RoleService extends BaseService
      */
     public function all($criteria = [], $include = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/roles', array_merge([
+        $response = $this->getIsvCorpClient($corpId)->get('/roles', array_merge([
             'include' => implode(',', $include)
         ], $criteria));
         if ($response->isResponseSuccess()) {
@@ -44,7 +44,7 @@ class RoleService extends BaseService
      */
     public function paginate($page = 1, $limit = 20, $criteria = [], $include = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/roles', array_merge([
+        $response = $this->getIsvCorpClient($corpId)->get('/roles', array_merge([
             'page' => $page,
             'limit' => $limit,
             'include' => implode(',', $include)
@@ -64,7 +64,7 @@ class RoleService extends BaseService
      */
     public function show($id, $include = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/roles/' . $id, [
+        $response = $this->getIsvCorpClient($corpId)->get('/roles/' . $id, [
             'include' => implode(',', $include)
         ]);
         if ($response->isResponseSuccess()) {
@@ -82,7 +82,7 @@ class RoleService extends BaseService
      */
     public function store($data, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/roles', $data);
+        $response = $this->getIsvCorpClient($corpId)->post('/roles', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -99,7 +99,7 @@ class RoleService extends BaseService
      */
     public function update($data, $id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/roles/' . $id, $data);
+        $response = $this->getIsvCorpClient($corpId)->patch('/roles/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -115,7 +115,7 @@ class RoleService extends BaseService
      */
     public function destroy($id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/roles/' . $id);
+        $response = $this->getIsvCorpClient($corpId)->delete('/roles/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }

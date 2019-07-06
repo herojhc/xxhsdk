@@ -9,21 +9,16 @@
 namespace XinXiHua\SDK\Services;
 
 use Illuminate\Support\Facades\Log;
-use XinXiHua\SDK\AccessToken;
 use XinXiHua\SDK\Models\Contact;
 use XinXiHua\SDK\Models\Corporation;
 use XinXiHua\SDK\Models\CorporationPermanentCode;
 use XinXiHua\SDK\Models\User;
+use XinXiHua\SDK\Services\Traits\RestClient;
 
 class AuthService
 {
 
-    protected $accessTokenService;
-
-    function __construct(AccessToken $accessToken)
-    {
-        $this->accessTokenService = $accessToken;
-    }
+    use RestClient;
 
     /**
      * @param $authCorpId
@@ -31,7 +26,7 @@ class AuthService
      */
     public function setAuthInfo($authCorpId)
     {
-        $isvClient = $this->accessTokenService->getIsvClient();
+        $isvClient = $this->getIsvClient();
 
         // 获取永久授权码
 
@@ -84,7 +79,7 @@ class AuthService
             $authCode = $args[1];
 
 
-            $isvCorpClient = $this->accessTokenService->getIsvCorpClient($authCorpId);
+            $isvCorpClient = $this->getIsvCorpClient($authCorpId);
 
             $response = $isvCorpClient->get(config('xxh-sdk.agent.corp_user_api'),
                 [

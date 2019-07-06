@@ -8,19 +8,9 @@
 
 namespace XinXiHua\SDK\Services;
 
-
-use XinXiHua\SDK\AccessToken;
+use XinXiHua\SDK\Services\Traits\RestClient;
 
 class BaseService
 {
-
-    /**
-     * @var AccessToken
-     */
-    protected $accessToken;
-
-    function __construct(AccessToken $accessToken)
-    {
-        $this->accessToken = $accessToken;
-    }
+    use RestClient;
 }

@@ -22,7 +22,7 @@ class EmployeeService extends BaseService
      */
     public function all($criteria = [], $include = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/employees', array_merge([
+        $response = $this->getIsvCorpClient($corpId)->get('/employees', array_merge([
             'include' => implode(',', $include)
         ], $criteria));
         if ($response->isResponseSuccess()) {
@@ -43,7 +43,7 @@ class EmployeeService extends BaseService
      */
     public function paginate($page = 1, $limit = 20, $criteria = [], $include = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/employees', array_merge([
+        $response = $this->getIsvCorpClient($corpId)->get('/employees', array_merge([
             'page' => $page,
             'limit' => $limit,
             'include' => implode(',', $include)
@@ -63,7 +63,7 @@ class EmployeeService extends BaseService
      */
     public function show($id, $include = [], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/employees/' . $id, [
+        $response = $this->getIsvCorpClient($corpId)->get('/employees/' . $id, [
             'include' => implode(',', $include)
         ]);
         if ($response->isResponseSuccess()) {
@@ -82,7 +82,7 @@ class EmployeeService extends BaseService
      */
     public function store($data, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/employees', $data);
+        $response = $this->getIsvCorpClient($corpId)->post('/employees', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -99,7 +99,7 @@ class EmployeeService extends BaseService
      */
     public function update($data, $id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/employees/' . $id, $data);
+        $response = $this->getIsvCorpClient($corpId)->patch('/employees/' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -115,7 +115,7 @@ class EmployeeService extends BaseService
     public function destroy($id, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/employees/' . $id);
+        $response = $this->getIsvCorpClient($corpId)->delete('/employees/' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }
@@ -130,7 +130,7 @@ class EmployeeService extends BaseService
      */
     public function batchDestroy(array $ids, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/employees/batch', [
+        $response = $this->getIsvCorpClient($corpId)->post('/employees/batch', [
             'delete' => $ids
         ]);
         if ($response->isResponseSuccess()) {
@@ -149,7 +149,7 @@ class EmployeeService extends BaseService
      */
     public function active($id, $userId, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/employees/active', [
+        $response = $this->getIsvCorpClient($corpId)->post('/employees/active', [
             'id' => $id,
             'user_id' => $userId
         ]);

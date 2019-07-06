@@ -22,7 +22,7 @@ class WorkOrderService extends BaseService
      */
     public function store($data, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->post('/work/orders', $data);
+        $response = $this->getIsvCorpClient($corpId)->post('/work/orders', $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -40,7 +40,7 @@ class WorkOrderService extends BaseService
     public function update($data, $id, $corpId = null)
     {
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->patch('/work/orders' . $id, $data);
+        $response = $this->getIsvCorpClient($corpId)->patch('/work/orders' . $id, $data);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data']['id'];
         }
@@ -56,7 +56,7 @@ class WorkOrderService extends BaseService
      */
     public function destroy($id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->delete('/work/orders' . $id);
+        $response = $this->getIsvCorpClient($corpId)->delete('/work/orders' . $id);
         if ($response->isResponseSuccess()) {
             return $id;
         }

@@ -32,7 +32,7 @@ class FileService extends BaseService
             $url .= '?type=' . $type;
         }
 
-        $response = $this->accessToken->getIsvCorpClient($corpId)->postMultipartSimple($url, [
+        $response = $this->getIsvCorpClient($corpId)->postMultipartSimple($url, [
             'name' => $file->getClientOriginalName(),
             'attachment' => fopen($file, 'r')// 这里无需关闭，STREAM 自动关闭
         ]);
@@ -72,7 +72,7 @@ class FileService extends BaseService
      */
     public function content($id, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/files/' . $id . '/content');
+        $response = $this->getIsvCorpClient($corpId)->get('/files/' . $id . '/content');
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }

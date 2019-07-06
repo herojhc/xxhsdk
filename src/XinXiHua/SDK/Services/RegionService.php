@@ -14,7 +14,7 @@ class RegionService extends BaseService
 
     public function all($columns = ['*'], $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/regions', [
+        $response = $this->getIsvCorpClient($corpId)->get('/regions', [
             'columns' => $columns
         ]);
         if ($response->isResponseSuccess()) {
@@ -29,7 +29,7 @@ class RegionService extends BaseService
      */
     public function getProvinces($corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/provinces');
+        $response = $this->getIsvCorpClient($corpId)->get('/provinces');
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -43,7 +43,7 @@ class RegionService extends BaseService
      */
     public function getCities($provinceId, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/provinces/' . $provinceId . '/cities');
+        $response = $this->getIsvCorpClient($corpId)->get('/provinces/' . $provinceId . '/cities');
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -57,7 +57,7 @@ class RegionService extends BaseService
      */
     public function getAreas($cityId, $corpId = null)
     {
-        $response = $this->accessToken->getIsvCorpClient($corpId)->get('/cities/' . $cityId . '/areas');
+        $response = $this->getIsvCorpClient($corpId)->get('/cities/' . $cityId . '/areas');
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
