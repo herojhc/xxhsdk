@@ -15,7 +15,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use XinXiHua\SDK\Facades\XXH;
-use XinXiHua\SDK\Services\AuthService;
+use XinXiHua\SDK\Services\AuthService as Service;
 
 class LoginController extends Controller
 {
@@ -51,11 +51,11 @@ class LoginController extends Controller
     protected $agentId;
 
     /**
-     * @var AuthService
+     * @var Service
      */
     protected $service;
 
-    public function __construct(AuthService $service)
+    public function __construct(Service $service)
     {
         $this->service = $service;
         $this->gatewayUrl = config('xxh-sdk.agent.gateway_url');
