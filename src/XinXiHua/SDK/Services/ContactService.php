@@ -215,11 +215,11 @@ class ContactService extends BaseService
      * @return mixed
      * @throws ApiException
      */
-    public function authorize($ids, $roleIds)
+    public function authorize(array $ids, array $roleIds)
     {
         $response = $this->getIsvCorpClient()->post('/contacts/authorize', [
-            'contact_ids' => $ids,
-            'authorize_role_ids' => $roleIds
+            'ids' => $ids,
+            'role_ids' => $roleIds
         ]);
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
