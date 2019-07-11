@@ -222,7 +222,7 @@ class ContactService extends BaseService
             'role_ids' => $roleIds
         ]);
         if ($response->isResponseSuccess()) {
-            return $response->getResponseData()['data'];
+            return $response->getResponseData();
         }
 
         throw new ApiException($response->getResponseMessage());
