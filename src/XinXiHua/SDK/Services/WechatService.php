@@ -54,4 +54,17 @@ class WechatService extends BaseService
         }
         throw new ApiException($response->getResponseMessage());
     }
+
+    /**
+     * @param null $corpId
+     * @return bool
+     */
+    public function getJsApiTicket($corpId = null)
+    {
+        $response = $this->getIsvCorpClient($corpId)->get('/wechat/jsapi/ticket');
+        if ($response->isResponseSuccess()) {
+            return $response->getResponseData()['data'];
+        }
+        return false;
+    }
 }
