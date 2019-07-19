@@ -65,4 +65,19 @@ class ArticleService extends BaseService
 
         throw new ApiException($response->getResponseMessage());
     }
+
+    /**
+     * @param null $corpId
+     * @return mixed
+     * @throws ApiException
+     */
+    public function total($corpId = null)
+    {
+        $response = $this->getIsvCorpClient($corpId)->get('/articles/total');
+        if ($response->isResponseSuccess()) {
+            return $response->getResponseData()['data'];
+        }
+
+        throw new ApiException($response->getResponseMessage());
+    }
 }
