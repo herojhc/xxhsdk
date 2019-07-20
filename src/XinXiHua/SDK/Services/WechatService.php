@@ -67,4 +67,15 @@ class WechatService extends BaseService
         }
         return false;
     }
+
+    public function getSignPackage($url, $corpId = null)
+    {
+        $response = $this->getIsvCorpClient($corpId)->get('/wechat/jsapi/sign-package', [
+            'url' => $url
+        ]);
+        if ($response->isResponseSuccess()) {
+            return $response->getResponseData()['data'];
+        }
+        return false;
+    }
 }
