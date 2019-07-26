@@ -166,6 +166,11 @@ class CreateOrUpdateUsersTable extends Migration
         $email = $table->string('email')->nullable()->default('')->comment('邮箱');
         if (Schema::hasColumn('users', 'email')) {
             $email->change();
+            try {
+                $table->dropUnique('users_email_unique');
+            } catch (Throwable $throwable) {
+
+            }
         }
 
         $email_validated = $table->boolean('email_validated')->nullable()->default(0)->comment('邮箱认证');
