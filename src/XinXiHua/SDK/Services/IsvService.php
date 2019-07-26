@@ -15,7 +15,7 @@ use XinXiHua\SDK\Events\Installed;
 use XinXiHua\SDK\Events\Uninstalled;
 use XinXiHua\SDK\Models\Contact;
 use XinXiHua\SDK\Models\Corporation;
-use XinXiHua\SDK\Models\CorporationPermanentCode;
+use XinXiHua\SDK\Models\CorporationPermanentCode as Code;
 use XinXiHua\SDK\Models\User;
 
 class IsvService
@@ -40,16 +40,16 @@ class IsvService
                 $corpName = $eventMsg->CorpName;
                 $permanentCode = $eventMsg->PermanentCode;
                 $authUser = $eventMsg->AuthUser;
-                $authInfo = CorporationPermanentCode::query()->where([
+                $code = (new Code())->newQuery()->where([
                     ['corp_id', $corpId],
                     ['agent_id', config('xxh-sdk.agent.agent_id')]
                 ])->first();
 
-                if ($authInfo) {
+                if ($code) {
 
-                    $authInfo->permanent_code = $permanentCode;
-                    $authInfo->saveOrFail();
-                    return 'success';
+                    $code->permanent_code = $permanentCode;
+                    $code->saveOrFail();
+                    return;
                 }
 
 
@@ -58,10 +58,10 @@ class IsvService
                 $arr['agent_id'] = config('xxh-sdk.agent.agent_id');
                 $arr['name'] = $corpName;
 
-                if (CorporationPermanentCode::forceCreate($arr)) {
+                if ((new Code())->newQuery()->forceCreate($arr)) {
 
                     // 添加一条记录到 corporations表
-                    Corporation::query()->updateOrCreate([
+                    (new Corporation())->newQuery()->updateOrCreate([
                         'corp_id' => $corpId
                     ],
                         [
@@ -71,7 +71,7 @@ class IsvService
                         ]);
 
                     // 添加管理员记录
-                    User::query()->updateOrCreate([
+                    (new User())->newQuery()->updateOrCreate([
                         'user_id' => $authUser->user_id
                     ], [
                         'name' => $authUser->name,
@@ -81,7 +81,7 @@ class IsvService
                     ]);
 
                     // 添加联系人
-                    Contact::query()->updateOrCreate([
+                    (new Contact())->newQuery()->updateOrCreate([
                         'contact_id' => $authUser->contact_id
                     ], [
                         'code' => $authUser->code,
@@ -93,15 +93,16 @@ class IsvService
                         'is_admin' => 1
                     ]);
 
-                    $corp = Corporation::find($corpId);
-                    $contact = Contact::find($authUser->contact_id);
-                    $user = User::find($authUser->user_id);
+                    $corp = (new Corporation())->newQuery()->find($corpId);
+                    $contact = (new Contact())->newQuery()->find($authUser->contact_id);
+                    $user = (new User())->newQuery()->find($authUser->user_id);
                     // 触发事件
                     event(new Installed($corp, $user, $contact));
-                    // 一定要返回success
-                    return 'success';
                 }
             });
+
+            // 一定要返回success
+            return 'success';
 
         } catch (\Throwable $throwable) {
             Log::error($throwable->getMessage(), ['exception' => $throwable]);
@@ -118,12 +119,12 @@ class IsvService
 
         try {
 
-            CorporationPermanentCode::query()->where([
+            (new Code())->newQuery()->where([
                 ['corp_id', $eventMsg->CorpId],
                 ['agent_id', config('auth.agent.agent_id')]
             ])->delete();
 
-            $corp = Corporation::find($eventMsg->CorpId);
+            $corp = (new Corporation())->newQuery()->find($eventMsg->CorpId);
             event(new Uninstalled($corp));
             return 'success';
 
