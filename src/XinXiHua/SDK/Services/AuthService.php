@@ -83,7 +83,7 @@ class AuthService
                 if (isset($result['data'])) {
                     $contact = $result['data'];
                     $user = $result['data']['user'];
-                    $roles = $result['roles'] ?? [];
+                    $roles = $result['data']['roles'] ?? [];
                 }
             }
 
