@@ -355,7 +355,6 @@ class RestClient
      */
     private function getOAuthToken($grant_type)
     {
-        $grant_types = $this->getServiceConfig('oauth2_grant_types');
         if (!isset($this->oauth_tokens[$grant_type])) {
             // request access token
             $this->postRequestAccessToken($grant_type, $this->getOAuthGrantRequestData($grant_type));
