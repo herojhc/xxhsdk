@@ -9,11 +9,11 @@
 namespace XinXiHua\SDK;
 
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use XinXiHua\SDK\Facades\XXH;
-use XinXiHua\SDK\Models\CorporationPermanentCode;
+use XinXiHua\SDK\Models\CorporationPermanentCode as Repository;
+use XinXiHua\SDK\Rest\RestClient;
 
-class AccessToken
+class CorpClient
 {
 
     protected $oauth_tokens = [];
@@ -24,7 +24,14 @@ class AccessToken
 
     protected $use_cache_token = null;
 
-    function __construct($service_name = null)
+    protected $auth_corp_id;
+
+    /**
+     * @var RestClient
+     */
+    protected $client;
+
+    function __construct($service_name = null, $auth_corp_id = null)
     {
         // use default service name
         if (empty($service_name)) {
@@ -32,34 +39,30 @@ class AccessToken
         }
 
         $this->service_name = $service_name;
-
+        $this->auth_corp_id = $auth_corp_id;
         $this->setUp();
     }
 
     protected function setUp()
     {
+        if (empty($this->auth_corp_id)) {
+            $this->auth_corp_id = XXH::id();
+        }
         $minutes = $this->getConfig('oauth_tokens_cache_minutes', 10);
         $this->use_cache_token = $minutes > 0;
         $this->useOAuthTokenFromCache();
+        $this->client = new RestClient($this->service_name, false);
     }
 
-    public function getIsvClient()
+    public function getClient($auth_corp_id = null)
     {
-        $client = new Rest\RestClient($this->service_name, false);
-        $client->withOAuthTokenTypeClientCredentials();
-        return $client;
-    }
-
-    public function getIsvCorpClient($authCorpId = null)
-    {
-        if (empty($authCorpId)) {
-            $authCorpId = XXH::id();
+        if (!empty($auth_corp_id)) {
+            $this->auth_corp_id = $auth_corp_id;
+            $this->useOAuthTokenFromCache();
         }
-        $client = new Rest\RestClient($this->service_name, false);
-        $access_token = $this->getIsvCorpAccessToken($authCorpId);
-        $client->setOAuthToken($authCorpId, $access_token);
-        $client->withOAuthToken($authCorpId);
-        return $client;
+        $this->client->setOAuthToken($this->client::GRANT_TYPE_CLIENT_CREDENTIALS, $this->getOauthToken($this->client::GRANT_TYPE_CLIENT_CREDENTIALS));
+        $this->client->withOAuthTokenTypeClientCredentials();
+        return $this->client;
     }
 
     //##################获取access_token##################
@@ -83,48 +86,41 @@ class AccessToken
         if (!$this->use_cache_token) {
             return;
         }
-
         $this->oauth_tokens = Cache::get($this->getOauthTokensCacheKey(), []);
-
     }
 
-
     /**
-     * @param $authCorpId
+     * @param $grant_type
      * @return mixed
      */
-    public function getIsvCorpAccessToken($authCorpId)
+    public function getOAuthToken($grant_type)
     {
 
-        if (!isset($this->oauth_tokens[$authCorpId])) {
+        if (!isset($this->oauth_tokens[$grant_type])) {
             // request access token
-            $permanentCode = CorporationPermanentCode::query()->where([
-                ['corp_id', $authCorpId],
+            $permanentCode = Repository::query()->where([
+                ['corp_id', $this->auth_corp_id],
                 ['agent_id', config('xxh-sdk.agent.agent_id')]
             ])->first();
 
             if ($permanentCode) {
-
-                $response = $this->postRequestAccessToken($this->getOAuthGrantRequestData($authCorpId, $permanentCode->permanent_code));
+                $response = $this->postRequestAccessToken($this->getOAuthGrantRequestData($permanentCode->permanent_code));
                 // handle access token
                 if ($response->getResponse()->getStatusCode() != 200) {
-                    throw new \RuntimeException('Failed to get access token for corporation [' . $authCorpId . ']!');
+                    throw new \RuntimeException('Failed to get access token for corporation [' . $this->auth_corp_id . ']!');
                 }
 
                 $result = $response->getResponseData();
-                // 记录返回值
-                Log::debug('restResponse', ['response' => $result]);
-
                 if (!isset($result['data']['access_token'])) {
                     throw new \RuntimeException('"access_token" is not exists in the response data!');
                 }
                 $access_token = $result['data']['access_token'];
-                $this->setOAuthToken($authCorpId, $access_token);
+                $this->setOAuthToken($grant_type, $access_token);
             } else {
                 throw new \RuntimeException('app is not install');
             }
         }
-        return $this->oauth_tokens[$authCorpId];
+        return $this->oauth_tokens[$grant_type];
     }
 
 
@@ -134,33 +130,32 @@ class AccessToken
      */
     public function postRequestAccessToken($data)
     {
-        return $this->getIsvClient()->post(config('xxh-sdk.agent.corp_token_api'), $data);
+        return (new IsvClient($this->service_name))->getClient()->post(config('xxh-sdk.agent.corp_token_api'), $data);
     }
 
     /**
-     * @param $authCorpId
      * @param $permanentCode
      * @return array
      */
-    public function getOAuthGrantRequestData($authCorpId, $permanentCode)
+    public function getOAuthGrantRequestData($permanentCode)
     {
         return [
-            'corp_id' => $authCorpId,
+            'corp_id' => $this->auth_corp_id,
             'permanent_code' => $permanentCode
         ];
     }
 
 
     /**
-     * @param $authCorpId
+     * @param $grant_type
      * @param $access_token
      */
-    public function setOAuthToken($authCorpId, $access_token)
+    public function setOAuthToken($grant_type, $access_token)
     {
         if (empty($access_token)) {
-            unset($this->oauth_tokens[$authCorpId]);
+            unset($this->oauth_tokens[$grant_type]);
         } else {
-            $this->oauth_tokens[$authCorpId] = $access_token;
+            $this->oauth_tokens[$grant_type] = $access_token;
         }
 
         // update to cache
@@ -176,6 +171,6 @@ class AccessToken
      */
     protected function getOauthTokensCacheKey()
     {
-        return $this->oauth_tokens_cache_key . '.' . $this->service_name;
+        return $this->oauth_tokens_cache_key . '.' . $this->service_name . '.' . $this->auth_corp_id;
     }
 }

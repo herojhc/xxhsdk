@@ -10,7 +10,6 @@ namespace XinXiHua\SDK\Rest;
 
 use GuzzleHttp\Client;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
@@ -21,11 +20,6 @@ class RestClient
      * @var string
      */
     private $service_name;
-
-    /**
-     * @var string
-     */
-    protected $oauth_tokens_cache_key = 'xxh-rest-api-client.oauth_tokens';
 
     /**
      * @var array
@@ -64,10 +58,6 @@ class RestClient
     const GRANT_TYPE_REFRESH_TOKEN = 'refresh_token';
 
     protected $use_oauth_token_grant_type = null;
-
-    protected $oauth_user_credentials = null;
-
-    protected $use_cache_token = null;
 
     protected $oauth_grant_request_data = [
         self::GRANT_TYPE_CLIENT_CREDENTIALS => [],
@@ -118,11 +108,6 @@ class RestClient
 
         $this->printLine("--------");
         $this->printLine("REST CLIENT SERVICE: " . $service_name . ", ENVIRONMENT: " . $this->environment);
-
-        // get cache
-        $minutes = $this->getConfig('oauth_tokens_cache_minutes', 10);
-        $this->use_cache_token = $minutes > 0;
-        $this->useOAuthTokenFromCache();
 
         $this->setServiceConfig($services[$service_name]);
 
@@ -230,39 +215,12 @@ class RestClient
     }
 
     /**
-     * @deprecated Please use setOAuthGrantRequestData() instead
-     * @param $oauth_user_credentials
-     */
-    public function setOAuthUserCredentials($oauth_user_credentials)
-    {
-//        $oauth_user_credentials = [
-//            'username' => 'libern@someline.com',
-//            'password' => 'Abc12345',
-//        ];
-        $this->oauth_user_credentials = $oauth_user_credentials;
-        $this->useOAuthTokenFromCache();
-    }
-
-    /**
-     * @deprecated Please use getOAuthGrantRequestData() instead
-     * @return null
-     */
-    protected function getOAuthUserCredentialsData()
-    {
-        if (empty($this->oauth_user_credentials)) {
-            throw new RuntimeException('Please set "oauth_user_credentials" by calling setOAuthUserCredentialsData()!');
-        }
-        return $this->oauth_user_credentials;
-    }
-
-    /**
      * @param $grant_type
      * @param array $data
      */
     public function setOAuthGrantRequestData($grant_type, array $data)
     {
         $this->oauth_grant_request_data[$grant_type] = $data;
-        $this->useOAuthTokenFromCache();
     }
 
     /**
@@ -283,7 +241,7 @@ class RestClient
      * @param $data
      * @return $this;
      */
-    protected function postRequestAccessToken($grant_type, $data)
+    public function postRequestAccessToken($grant_type, $data)
     {
         $url = $this->getServiceConfig('oauth2_access_token_url');
         return $this->post($url, array_merge($data, [
@@ -321,78 +279,25 @@ class RestClient
     }
 
     /**
-     *  Use OAuth Tokens from Cache
-     */
-    private function useOAuthTokenFromCache()
-    {
-        if (!$this->use_cache_token) {
-            return;
-        }
-
-        $this->oauth_tokens = Cache::get($this->getOauthTokensCacheKey(), []);
-        if (!empty($this->oauth_tokens)) {
-            $this->printLine("Using OAuth Tokens from cache:");
-            $this->printArray($this->oauth_tokens);
-        }
-    }
-
-    /**
-     * @return string
-     */
-    private function getOauthTokensCacheKey()
-    {
-        $user_hash = '';
-        if (!empty($this->oauth_user_credentials)) {
-            $user_hash = "." . sha1(serialize($this->oauth_user_credentials));
-        }
-        $cache_key = $this->oauth_tokens_cache_key . '.' . $this->service_name . '.' . $this->environment . $user_hash;
-        return $cache_key;
-    }
-
-    /**
      * @param $grant_type
      * @return mixed
      */
     private function getOAuthToken($grant_type)
     {
-        if (!isset($this->oauth_tokens[$grant_type])) {
-            // request access token
-            $this->postRequestAccessToken($grant_type, $this->getOAuthGrantRequestData($grant_type));
-
-            // handle access token
-            if ($this->getResponse()->getStatusCode() != 200) {
-                throw new RuntimeException('Failed to get access token for grant type [' . $grant_type . ']!');
-            }
-
-            $data = $this->getResponseData();
-            if (!isset($data['access_token'])) {
-                throw new RuntimeException('"access_token" is not exists in the response data!');
-            }
-            $access_token = $data['access_token'];
-            $this->setOAuthToken($grant_type, $access_token);
-        }
         return $this->oauth_tokens[$grant_type];
     }
 
     /**
-     * @param $type
+     * @param $grant_type
      * @param $access_token
      */
-    public function setOAuthToken($type, $access_token)
+    public function setOAuthToken($grant_type, $access_token)
     {
-        if ($this->debug_mode) {
-            echo "SET OAuthToken[$type]: $access_token\n\n";
-        }
-
         if (empty($access_token)) {
-            unset($this->oauth_tokens[$type]);
+            unset($this->oauth_tokens[$grant_type]);
         } else {
-            $this->oauth_tokens[$type] = $access_token;
+            $this->oauth_tokens[$grant_type] = $access_token;
         }
-
-        // update to cache
-        $minutes = $this->getConfig('oauth_tokens_cache_minutes', 10);
-        Cache::put($this->getOauthTokensCacheKey(), $this->oauth_tokens, $minutes);
     }
 
     /**
@@ -622,7 +527,7 @@ class RestClient
     {
         $this->response = $response;
         // 记录下返回信息
-        Log::info($response);
+        Log::debug($response);
         $statusCode = $this->response->getStatusCode();
         if ($statusCode >= 300 && $this->debug_mode) {
             echo "\nResponse STATUS CODE is $statusCode:\n";

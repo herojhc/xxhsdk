@@ -9,19 +9,20 @@
 namespace XinXiHua\SDK\Services\Traits;
 
 
-use XinXiHua\SDK\AccessToken;
+use XinXiHua\SDK\CorpClient;
+use XinXiHua\SDK\IsvClient;
 
 trait RestClient
 {
     public function getIsvCorpClient($corpId = null, $service = null)
     {
-        $accessToken = new AccessToken($service);
-        return $accessToken->getIsvCorpClient($corpId);
+        $accessToken = new CorpClient($service);
+        return $accessToken->getClient($corpId);
     }
 
     public function getIsvClient($service = null)
     {
-        $accessToken = new AccessToken($service);
-        return $accessToken->getIsvClient();
+        $accessToken = new IsvClient($service);
+        return $accessToken->getClient();
     }
 }
