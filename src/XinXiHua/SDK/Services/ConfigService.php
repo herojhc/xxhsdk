@@ -15,12 +15,17 @@ class ConfigService extends BaseService
 {
     /**
      * @param $type
+     * @param null $app
      * @return mixed
      * @throws ApiException
      */
-    public function getConfigs($type)
+    public function getConfigs($type, $app = null)
     {
-        $response = $this->getIsvCorpClient()->get('/configs/' . config('app.name') . '_' . $type . '/type');
+        if (empty($app)) {
+            $app = config('app.name');
+        }
+
+        $response = $this->getIsvCorpClient()->get('/configs/' . $app . '_' . $type . '/type');
         if ($response->isResponseSuccess()) {
             return $response->getResponseData()['data'];
         }
@@ -31,12 +36,17 @@ class ConfigService extends BaseService
     /**
      * @param $type
      * @param array $configs
+     * @param null $app
      * @return bool
      * @throws ApiException
      */
-    public function setConfigs($type, array $configs)
+    public function setConfigs($type, array $configs, $app = null)
     {
-        $response = $this->getIsvCorpClient()->post('/configs/' . config('app.name') . '_' . $type . '/type', $configs);
+        if (empty($app)) {
+            $app = config('app.name');
+        }
+
+        $response = $this->getIsvCorpClient()->post('/configs/' . $app . '_' . $type . '/type', $configs);
         if ($response->isResponseSuccess()) {
             return true;
         }
