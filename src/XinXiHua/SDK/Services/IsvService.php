@@ -23,11 +23,8 @@ class IsvService
     public function install($eventMsg)
     {
         try {
-            Log::debug('installingLog', [
-                'log' => [
-                    'corpId' => $eventMsg->CorpId,
-                    'permanentCode' => $eventMsg->PermanentCode
-                ]
+            Log::debug('installEvent', [
+                'eventMsg' => $eventMsg
             ]);
         } catch (\Throwable $exception) {
 
@@ -40,9 +37,10 @@ class IsvService
                 $corpName = $eventMsg->CorpName;
                 $permanentCode = $eventMsg->PermanentCode;
                 $authUser = $eventMsg->AuthUser;
+                $agentId = $eventMsg->AppId;
                 $code = (new Code())->newQuery()->where([
                     ['corp_id', $corpId],
-                    ['agent_id', config('xxh-sdk.agent.agent_id')]
+                    ['agent_id', $agentId]
                 ])->first();
 
                 if ($code) {
@@ -55,7 +53,7 @@ class IsvService
 
                 $arr['permanent_code'] = $permanentCode;
                 $arr['corp_id'] = $corpId;
-                $arr['agent_id'] = config('xxh-sdk.agent.agent_id');
+                $arr['agent_id'] = $agentId;
                 $arr['name'] = $corpName;
 
                 if ((new Code())->newQuery()->forceCreate($arr)) {
@@ -114,23 +112,20 @@ class IsvService
 
     public function uninstall($eventMsg)
     {
-
-        // 这里最好是 软删除
-
         try {
 
             (new Code())->newQuery()->where([
                 ['corp_id', $eventMsg->CorpId],
-                ['agent_id', config('auth.agent.agent_id')]
+                ['agent_id', $eventMsg->AppId]
             ])->delete();
 
             $corp = (new Corporation())->newQuery()->find($eventMsg->CorpId);
             event(new Uninstalled($corp));
+            // 返回success
             return 'success';
 
         } catch (\Throwable $throwable) {
             Log::error($throwable->getMessage(), ['exception' => $throwable]);
-
         }
 
         return 'error';

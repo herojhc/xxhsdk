@@ -19,17 +19,17 @@ class Prpcrypt
     }
 
 
-    public function encrypt($text, $corpid)
+    public function encrypt($text, $corpId)
     {
         try {
             //获得16位随机字符串，填充到明文之前
             $random = $this->getRandomStr();
-            $text = $random . pack("N", strlen($text)) . $text . $corpid;
+            $text = $random . pack("N", strlen($text)) . $text . $corpId;
             $iv = substr($this->key, 0, 16);
             $pkc_encoder = new PKCS7Encoder;
             $text = $pkc_encoder->encode($text);
             $encrypted = openssl_encrypt($text, 'AES-256-CBC', substr($this->key, 0, 32), OPENSSL_ZERO_PADDING, $iv);
-            return array(ErrorCode::$OK, $encrypted);
+            return array(ErrorCode::$OK, base64_encode($encrypted));
         } catch (\Exception $e) {
             return array(ErrorCode::$EncryptAESError, null);
         }
@@ -39,13 +39,14 @@ class Prpcrypt
     /**
      * 对密文进行解密
      * @param string $encrypted 需要解密的密文
+     * @param $corpId
      * @return string|array 解密得到的明文
      */
-    public function decrypt($encrypted, $corpid)
+    public function decrypt($encrypted, $corpId)
     {
         try {
             $iv = substr($this->key, 0, 16);
-            $decrypted = openssl_decrypt($encrypted, 'AES-256-CBC', substr($this->key, 0, 32), OPENSSL_ZERO_PADDING, $iv);
+            $decrypted = openssl_decrypt(base64_decode($encrypted), 'AES-256-CBC', substr($this->key, 0, 32), OPENSSL_ZERO_PADDING, $iv);
         } catch (\Exception $e) {
             return array(ErrorCode::$DecryptAESError, null);
         }
@@ -60,11 +61,11 @@ class Prpcrypt
             $len_list = unpack("N", substr($content, 0, 4));
             $xml_len = $len_list[1];
             $xml_content = substr($content, 4, $xml_len);
-            $from_corpid = substr($content, $xml_len + 4);
+            $fromCorpId = substr($content, $xml_len + 4);
         } catch (\Exception $e) {
             return array(ErrorCode::$DecryptAESError, null);
         }
-        if ($from_corpid != $corpid)
+        if ($fromCorpId != $corpId)
             return array(ErrorCode::$ValidateSuiteKeyError, null);
         return array(0, $xml_content);
     }
