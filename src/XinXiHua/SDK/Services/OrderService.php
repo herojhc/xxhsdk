@@ -9,6 +9,8 @@
 namespace XinXiHua\SDK\Services;
 
 use XinXiHua\SDK\Exceptions\ApiException;
+use XinXiHua\SDK\Support\Crypto\XxhCrypt;
+use XinXiHua\SDK\Support\Sign\MakeSign;
 
 class OrderService extends BaseService
 {
@@ -151,16 +153,40 @@ class OrderService extends BaseService
     /**
      * @param $id
      * @param string $tradeType
-     * @param array $payInfo
+     * @param array $data [money,receipted_by]
      * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function pay($id, $tradeType = 'MOBILE', $payInfo = [], $corpId = null)
+    public function pay($id, $data = [], $tradeType = 'MOBILE', $corpId = null)
     {
-        $response = $this->getIsvCorpClient($corpId)->post('/orders/' . $id . '/pay?tradeType=' . $tradeType, $payInfo);
+
+        $timestamp = time();
+        $nonce = md5(uniqid());
+        // 加密和签名
+        $data['order_id'] = $id;
+        $data['trade_type'] = $tradeType;
+        $data['timestamp'] = $timestamp;
+        $data['nonce'] = $nonce;
+        $data['agent_id'] = config('xxh-sdk.agent.agent_id');
+
+        // 加密
+        $makeSign = new MakeSign();
+        $key = config('xxh-sdk.agent.encoding_key');
+        $data['sign'] = $makeSign->sign($key . $timestamp, $data);
+
+        $response = $this->getIsvCorpClient($corpId)->post('/order/pay', $data);
         if ($response->isResponseSuccess()) {
-            return $response->getResponseData()['data'];
+            $result = $response->getResponseData();
+            // 验签
+            $checkSign = $result['sign'];
+            unset($result['sign']);
+            if ($makeSign->check($checkSign, $key . $result['timestamp'], $result)) {
+                return $result;
+            }
+
+            throw new ApiException('验签失败');
+
         }
         throw new ApiException($response->getResponseMessage());
     }
