@@ -56,6 +56,29 @@ class WechatService extends BaseService
     }
 
     /**
+     * @param $toId
+     * @param array $data
+     * @param $templateId
+     * @param null $url
+     * @param null $corpId
+     * @return bool
+     * @throws ApiException
+     */
+    public function sendTemplateMessage($toId, array $data, $templateId, $url = null, $corpId = null)
+    {
+        $response = $this->getIsvCorpClient($corpId)->post('/wechat/template/message', [
+            'to_id' => $toId,
+            'data' => $data,
+            'url' => $url,
+            'template_id' => $templateId
+        ]);
+        if ($response->isResponseSuccess()) {
+            return true;
+        }
+        throw new ApiException($response->getResponseMessage());
+    }
+
+    /**
      * @param null $corpId
      * @return bool
      */
