@@ -76,14 +76,18 @@ class ContactService extends BaseService
 
     /**
      * @param $data
+     * @param string $storeType
      * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function store($data, $corpId = null)
+    public function store($data, $storeType = 'store', $corpId = null)
     {
-        $response = $this->getIsvCorpClient($corpId)->post('/contacts', $data);
+        $response = $this->getIsvCorpClient($corpId)->post('/contacts?storeType=' . $storeType, $data);
         if ($response->isResponseSuccess()) {
+            if ($storeType == 'batch') {
+                return $response->getResponseData()['data']['count'];
+            }
             return $response->getResponseData()['data']['id'];
         }
 
