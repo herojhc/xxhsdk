@@ -16,6 +16,22 @@ class ReceiptService extends BaseService
 
     /**
      * @param $data
+     * @param $id
+     * @param null $corpId
+     * @return mixed
+     * @throws ApiException
+     */
+    public function update($data, $id, $corpId = null)
+    {
+        $response = $this->getIsvCorpClient($corpId)->patch('/receipts/' . $id, $data);
+        if ($response->isResponseSuccess()) {
+            return $response->getResponseData()['data']['id'];
+        }
+        throw new ApiException($response->getResponseMessage());
+    }
+
+    /**
+     * @param $data
      * @param null $corpId
      * @return mixed
      * @throws ApiException

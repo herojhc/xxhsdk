@@ -28,7 +28,7 @@ class Prpcrypt
             $iv = substr($this->key, 0, 16);
             $pkc_encoder = new PKCS7Encoder;
             $text = $pkc_encoder->encode($text);
-            $encrypted = openssl_encrypt($text, 'AES-256-CBC', substr($this->key, 0, 32), OPENSSL_ZERO_PADDING, $iv);
+            $encrypted = openssl_encrypt($text, 'AES-256-CBC', substr($this->key, 0, 32), OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING, $iv);
             return array(ErrorCode::$OK, base64_encode($encrypted));
         } catch (\Exception $e) {
             return array(ErrorCode::$EncryptAESError, null);
@@ -46,7 +46,7 @@ class Prpcrypt
     {
         try {
             $iv = substr($this->key, 0, 16);
-            $decrypted = openssl_decrypt(base64_decode($encrypted), 'AES-256-CBC', substr($this->key, 0, 32), OPENSSL_ZERO_PADDING, $iv);
+            $decrypted = openssl_decrypt(base64_decode($encrypted), 'AES-256-CBC', substr($this->key, 0, 32), OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING, $iv);
         } catch (\Exception $e) {
             return array(ErrorCode::$DecryptAESError, null);
         }
