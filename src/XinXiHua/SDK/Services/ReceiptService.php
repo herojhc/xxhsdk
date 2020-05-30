@@ -16,22 +16,6 @@ class ReceiptService extends BaseService
 
     /**
      * @param $data
-     * @param $id
-     * @param null $corpId
-     * @return mixed
-     * @throws ApiException
-     */
-    public function update($data, $id, $corpId = null)
-    {
-        $response = $this->getIsvCorpClient($corpId)->patch('/receipts/' . $id, $data);
-        if ($response->isResponseSuccess()) {
-            return $response->getResponseData()['data']['id'];
-        }
-        throw new ApiException($response->getResponseMessage());
-    }
-
-    /**
-     * @param $data
      * @param null $corpId
      * @return mixed
      * @throws ApiException
@@ -48,15 +32,19 @@ class ReceiptService extends BaseService
 
     /**
      * @param $id
+     * @param array $data
+     * @param string $tradeType
      * @param null $corpId
      * @return mixed
      * @throws ApiException
      */
-    public function pay($id, $corpId = null)
+    public function pay($id, $data = [], $tradeType = 'MOBILE', $corpId = null)
     {
-        $response = $this->getIsvCorpClient($corpId)->post('/receipts/' . $id . '/pay');
+
+        $data['trade_type'] = $tradeType;
+        $response = $this->getIsvCorpClient($corpId)->post('/receipts/' . $id . '/pay', $data);
         if ($response->isResponseSuccess()) {
-            return $id;
+            return $response->getResponseData();
         }
         throw new ApiException($response->getResponseMessage());
     }
