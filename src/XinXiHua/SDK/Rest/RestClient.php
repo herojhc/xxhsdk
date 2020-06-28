@@ -188,9 +188,7 @@ class RestClient
     {
         $base_uri = $this->getServiceConfig('base_uri');
         $guzzle_client_config = $this->getConfig('guzzle_client_config', []);
-        if (!ends_with($base_uri, '/')) {
-            $base_uri .= '/';
-        }
+        $base_uri = rtrim($base_uri, '\/') . './';
         $this->printLine("REST CLIENT BASE URI: " . $base_uri);
         $this->client = new Client(array_merge($guzzle_client_config, [
             'base_uri' => $base_uri,
