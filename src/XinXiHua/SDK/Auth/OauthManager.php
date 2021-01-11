@@ -91,7 +91,7 @@ class OauthManager
      *
      * @return string
      */
-    public function setOauthUser()
+    public function setOauthToken()
     {
         $token = $this->token();
         $cacheKey = $this->getAuthTokenKey($token);
@@ -106,18 +106,19 @@ class OauthManager
      * 根据临时授权码获取授权信息
      *
      * @param $token
-     * @return OauthUser
+     * @return OauthUser|null
      */
-    public function getOauthUser($token)
+    public function loginUsingToken($token)
     {
         $cacheKey = $this->getAuthTokenKey($token);
         $oauth = Cache::get($cacheKey);
-        $oauthUser = new OauthUser();
+        $oauthUser = null;
         if (isset($oauth['oauth_id']) && !empty($oauth['oauth_id'])) {
+            $oauthUser = new OauthUser();
             $oauthUser->oauthId = $oauth['oauth_id'];
             $oauthUser->oauthType = $oauth['oauth_type'] ?? 'wechat';
         }
-        return $oauthUser;
+        return $this->oauth = $oauthUser;
     }
 
     protected function token()
