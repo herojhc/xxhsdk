@@ -10,7 +10,7 @@ namespace XinXiHua\SDK\Auth;
 
 use Illuminate\Contracts\Session\Session;
 use XinXiHua\SDK\Models\OauthUser;
-
+use Illuminate\Support\Facades\Cache;
 
 class OauthManager
 {
@@ -80,5 +80,33 @@ class OauthManager
         $this->setOauth($oauth);
         return $this->oauth;
 
+    }
+
+
+    protected function getAuthTokenKey($token)
+    {
+        return 'oauth.auth_token.' . sha1(static::class) . '.' . $token;
+    }
+
+    public function setAuthToken()
+    {
+        $token = $this->token();
+        $cacheKey = $this->getAuthTokenKey($token);
+        Cache::put($cacheKey, [
+            'oauth_id' => $this->oauth->oauthId,
+            'oauth_type' => $this->oauth->oauthType
+        ], 15);
+        return $token;
+    }
+
+    public function getAuthToken($token)
+    {
+        $cacheKey = $this->getAuthTokenKey($token);
+        return Cache::get($cacheKey);
+    }
+
+    protected function token()
+    {
+        return hash_hmac('sha256', \Illuminate\Support\Str::random(40), $this->id());
     }
 }
