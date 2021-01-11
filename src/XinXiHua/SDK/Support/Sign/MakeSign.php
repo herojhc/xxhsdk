@@ -32,9 +32,14 @@ class MakeSign
             $params = $this->decodeParams($params);
             // 字典排序
             ksort($params);
-            // 生成查询字符串
-            $body = http_build_query($params);
-            return $this->generateResponseBodySignature($key, $body);
+            $unsignedData = "";
+            foreach ($params as $paramKey => $paramValue) {
+                if (!empty($paramValue)) {
+                    $unsignedData .= $paramKey . '=' . trim($paramValue) . '&';
+                }
+            }
+            // 生成签名
+            return $this->generateResponseBodySignature($key, rtrim($unsignedData, '&'));
         } catch (\Exception $exception) {
         }
         return false;

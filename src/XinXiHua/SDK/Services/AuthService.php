@@ -127,4 +127,20 @@ class AuthService
         return null;
 
     }
+
+    public function getOauthUser($corpId, $authCode)
+    {
+        $isvCorpClient = $this->getIsvCorpClient($corpId);
+        $response = $isvCorpClient->get(config('xxh-sdk.agent.corp_oauth_user_api'),
+            [
+                'auth_code' => $authCode
+            ]
+        );
+        Log::debug($response->getResponse());
+        if ($response->isResponseSuccess()) {
+            $result = $response->getResponseData();
+            return $result['data'] ?? [];
+        }
+        return [];
+    }
 }

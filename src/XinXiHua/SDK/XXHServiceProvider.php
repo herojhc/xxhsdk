@@ -9,6 +9,7 @@
 namespace XinXiHua\SDK;
 
 use Illuminate\Support\ServiceProvider;
+use XinXiHua\SDK\Auth\OauthManager;
 use XinXiHua\SDK\Auth\XXHManager;
 
 class XXHServiceProvider extends ServiceProvider
@@ -58,9 +59,14 @@ class XXHServiceProvider extends ServiceProvider
             'xxh-sdk'
         );
 
-        // 启动信息化
+        // 注册信息化
         $this->app->singleton('xxh', function () {
             return new XXHManager($this->app);
+        });
+
+        // 注册 oauth
+        $this->app->singleton('oauth', function () {
+            return new OauthManager($this->app);
         });
 
     }

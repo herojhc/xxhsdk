@@ -15,6 +15,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use XinXiHua\SDK\Facades\OAuth;
 use XinXiHua\SDK\Facades\XXH;
 use XinXiHua\SDK\Services\AuthService as Service;
 
@@ -97,7 +98,6 @@ class LoginController extends Controller
         return redirect($gatewayUri);
     }
 
-
     public function callback(Request $request)
     {
 
@@ -135,6 +135,39 @@ class LoginController extends Controller
         }
 
         return '登陆失败或授权码已过期';
+    }
+
+    public function oauth(Request $request)
+    {
+        $authCode = $request->get('auth_code');
+        $corpId = $request->get('corp_id');
+
+        if (!$authCode || !$corpId) {
+            return '参数错误';
+        }
+
+        try {
+
+            $oauth = $this->service->getOauthUser($corpId, $authCode);
+            if (!isset($oauth['open_id']) || empty($oauth['open_id'])) {
+                return '获取授权信息失败';
+            }
+
+            // 执行登录
+            OAuth::login($oauth);
+
+            // 定义跳转url
+            if (!empty($request->get('service', ''))) {
+                $request->session()->put('url.intended', base64_decode($request->get('service', '')));
+            }
+            return redirect()->intended($this->redirectPath());
+
+        } catch (\Exception $exception) {
+            Artisan::call('cache:clear');
+            Log::error($exception->getMessage(), ['exception' => $exception]);
+        }
+
+        return '授权失败或授权码已过期';
     }
 
 }

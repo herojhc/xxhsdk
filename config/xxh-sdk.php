@@ -108,9 +108,11 @@ return array(
 
     'agent' => [
         'agent_id' => env('AUTH_AGENT_ID', ''),
-        'platform_url' => env('AUTH_PALTFORM_URL', 'https://oa.xinxihua.com'),
+        'platform_url' => env('AUTH_PLATFORM_URL', 'https://oa.xinxihua.com'),
         'gateway_url' => env('AUTH_GATEWAY_URL', 'https://oa.xinxihua.com/sso-login'),
+        'oauth_url' => env('AUTH_OAUTH_URL', 'https://oa.xinxihua.com/oauth2/wechat/authorize/redirect'),
         'corp_user_api' => 'auth_user',
+        'corp_oauth_user_api' => 'oauth_user',
         'corp_token_api' => 'corp_tokens',
         'corp_info' => 'auth_corp',
         'token' => env('AUTH_TOKEN', ''),

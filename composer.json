@@ -42,7 +42,8 @@
         "XinXiHua\\SDK\\XXHServiceProvider"
       ],
       "aliases": {
-        "XXH": "XinXiHua\\SDK\\Facades\\XXH"
+        "XXH": "XinXiHua\\SDK\\Facades\\XXH",
+        "OAuth": "XinXiHua\\SDK\\Facades\\OAuth"
       }
     }
   }
