@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Facade;
  * @method static \XinXiHua\SDK\Models\OauthUser|null oauth()
  * @method static string|null id()
  * @method static void login(array $oauth)
+ * @method static string setOauthUser()
+ * @method static \XinXiHua\SDK\Models\OauthUser getOauthUser
  *
  * @see \XinXiHua\SDK\Auth\OauthManager
  */

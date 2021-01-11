@@ -79,16 +79,19 @@ class OauthManager
         $this->session->put($this->getName(), json_encode($oauth, JSON_UNESCAPED_UNICODE));
         $this->setOauth($oauth);
         return $this->oauth;
-
     }
-
 
     protected function getAuthTokenKey($token)
     {
         return 'oauth.auth_token.' . sha1(static::class) . '.' . $token;
     }
 
-    public function setAuthToken()
+    /**
+     * 临时授权码
+     *
+     * @return string
+     */
+    public function setOauthUser()
     {
         $token = $this->token();
         $cacheKey = $this->getAuthTokenKey($token);
@@ -99,10 +102,22 @@ class OauthManager
         return $token;
     }
 
-    public function getAuthToken($token)
+    /**
+     * 根据临时授权码获取授权信息
+     *
+     * @param $token
+     * @return OauthUser
+     */
+    public function getOauthUser($token)
     {
         $cacheKey = $this->getAuthTokenKey($token);
-        return Cache::get($cacheKey);
+        $oauth = Cache::get($cacheKey);
+        $oauthUser = new OauthUser();
+        if (isset($oauth['oauth_id']) && !empty($oauth['oauth_id'])) {
+            $oauthUser->oauthId = $oauth['oauth_id'];
+            $oauthUser->oauthType = $oauth['oauth_type'] ?? 'wechat';
+        }
+        return $oauthUser;
     }
 
     protected function token()
