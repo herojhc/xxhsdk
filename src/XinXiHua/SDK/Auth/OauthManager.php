@@ -49,8 +49,11 @@ class OauthManager
         }
 
         if ($this->session->isStarted()) {
-            $oauth = json_decode($this->session->get($this->getName()), true);
-            $this->setOauth($oauth);
+            $session = $this->session->get($this->getName());
+            if (!empty($session)) {
+                $oauth = json_decode($session, true);
+                $this->setOauth($oauth);
+            }
         }
 
         return $this->oauth;
