@@ -154,6 +154,7 @@ class LoginController extends Controller
             }
 
             // 执行登录
+            XXH::loginUsingId($corpId);
             OAuth::login($oauth);
 
             // 定义跳转url
