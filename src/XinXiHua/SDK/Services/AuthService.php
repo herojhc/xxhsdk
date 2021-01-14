@@ -38,7 +38,7 @@ class AuthService
                 'corp_id' => $authCorpId,
                 'permanent_code' => $install->permanent_code
             ]);
-            Log::debug($response->getResponse());
+            Log::debug('SET_AUTH_INFO', [$response->getResponse()]);
             if ($response->isResponseSuccess()) {
                 $result = $response->getResponseData();
                 if (isset($result['data'])) {
@@ -75,7 +75,7 @@ class AuthService
                     'auth_code' => $authCode
                 ]
             );
-            Log::debug($response->getResponse());
+            Log::debug('SET_USER_INFO', [$response->getResponse()]);
             if ($response->isResponseSuccess()) {
 
                 $result = $response->getResponseData();
@@ -136,7 +136,7 @@ class AuthService
                 'auth_code' => $authCode
             ]
         );
-        Log::debug($response->getResponse());
+        Log::debug('GET_OAUTH_USER', [$authCode => $response->getResponse()]);
         if ($response->isResponseSuccess()) {
             $result = $response->getResponseData();
             return $result['data'] ?? [];
